@@ -35,7 +35,7 @@ namespace Timers
             if (e.Key == Key.A)
             {
                 Random rnd = new Random();
-                timers[rnd.Next(timers.Count)].Timers.Add(new TimerSituation(rnd.Next(100)));
+                timers[rnd.Next(timers.Count)].Timers.Add(new Timer(rnd.Next(10)));
             }
             if (e.Key == Key.C)
             {
@@ -46,22 +46,12 @@ namespace Timers
 
         private void Border_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            ((TimersContainer)((Border)sender).DataContext).Timers.Add(new TimerSituation(100));
+            ((TimersContainer)((Border)sender).DataContext).Timers.Add(new Timer(10));
         }
 
         private void Border_MouseUp_1(object sender, MouseButtonEventArgs e)
         {
             timers.Add(new TimersContainer());
-        }
-
-        private void Grid_MouseEnter(object sender, MouseEventArgs e)
-        {
-            ((TimerSituation)((Grid)sender).DataContext).Hovered = true;
-        }
-
-        private void Grid_MouseLeave(object sender, MouseEventArgs e)
-        {
-            ((TimerSituation)((Grid)sender).DataContext).Hovered = false;
         }
     }
 }

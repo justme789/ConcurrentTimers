@@ -19,7 +19,6 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto" ></ColumnDefinition>
                                         <ColumnDefinition Width="auto" ></ColumnDefinition>
@@ -32,44 +31,8 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Border Grid.Row="1" Margin="10,10,0,0" Width="120" Height="120" Background="#dd101010" CornerRadius="10" BorderThickness="2" BorderBrush="{Binding Brush}">
-                                                    <Grid Background="Transparent" MouseEnter="Grid_MouseEnter" MouseLeave="Grid_MouseLeave" DataContext="{Binding}">
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition Height="auto"></RowDefinition>
-                                                            <RowDefinition Height="auto"></RowDefinition>
-                                                            <RowDefinition Height="*"></RowDefinition>
-                                                            <RowDefinition Height="auto"></RowDefinition>
-                                                            <RowDefinition Height="auto"></RowDefinition>
-                                                        </Grid.RowDefinitions>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="10"></ColumnDefinition>
-                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                            <ColumnDefinition Width="10"></ColumnDefinition>
-                                                        </Grid.ColumnDefinitions>
-                                                        <TextBlock Grid.Row="2" Grid.ColumnSpan="10" Foreground="{Binding Brush}" Text="{Binding DisplayVal}" VerticalAlignment="Center" 
-                                                                   HorizontalAlignment="Center" FontSize="24" FontWeight="Bold">
-                                                            <TextBlock.Effect>
-                                                                <DropShadowEffect BlurRadius="6"
-                                                                    ShadowDepth="0" 
-                                                                    Color="{Binding GlowColor}" 
-                                                                    Opacity="1">
-                                                                </DropShadowEffect>
-                                                            </TextBlock.Effect>
-                                                        </TextBlock>
-                                                        <Border Visibility="{Binding SubVisibility}" Grid.Column="1" Grid.Row="3" CornerRadius="10" Padding="5" BorderBrush="#aaa" BorderThickness="1">
-                                                            <Path
-                                                                Data="M0.000488281 0.125V24.5035L18.0004 12.2525L0.000488281 0.125ZM3.00049 5.94115L12.6206 12.2525L3.00049 18.6875V5.94115Z"
-                                                                Stroke="{Binding Brush}"
-                                                                Fill="{Binding Brush}"
-                                                                Stretch="Uniform"></Path>
-                                                        </Border>
-                                                        <Border x:Name="bufferBorder" Grid.Row="5" Height="15"></Border>
-                                                    </Grid>
-                                                </Border>
+                                                <local:TimerModule Grid.Row="1" >
+                                                </local:TimerModule>
                                                     
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
