@@ -1,29 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace Timers
 {
     public class Timer : INotifyPropertyChanged
     {
         private Thread _soundThread;
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+        private bool _finished = false;
+        private string _displayVal = "";
+        private bool _isHovered = false;
+        private bool _isPaused = false;
         public long CurrVal { get; set; }
         public bool Cancelled { get; set; }
-        private bool _finished = false;
         public bool Finished
         {
             get
@@ -32,7 +24,7 @@ namespace Timers
             }
             set
             {
-                _finished = value; 
+                _finished = value;
                 if (_finished)
                 {
                     CancelVisibility = Visibility.Visible;
@@ -48,14 +40,13 @@ namespace Timers
                 FinishTimer();
             }
         }
-        private bool isHovered = false;
         public bool Hovered
         {
-            get { return isHovered; }
+            get { return _isHovered; }
             set
             {
-                isHovered = value;
-                if (isHovered && !Finished)
+                _isHovered = value;
+                if (_isHovered && !Finished)
                 {
                     SubVisibility = Visibility.Visible;
                 }
@@ -66,32 +57,64 @@ namespace Timers
                 OnPropertyChanged("SubVisibility");
             }
         }
+        public bool IsPaused
+        {
+            get { return _isPaused; }
+            set
+            {
+                _isPaused = value;
+                if (_isPaused)
+                {
+                    PauseVisibility = Visibility.Collapsed;
+                    PlayVisibility = Visibility.Visible;
+                    Brush = new SolidColorBrush(Color.FromArgb(66, 122, 122, 122));
+                    GlowColor = Brush.Color;
+                }
+                else
+                {
+                    PauseVisibility = Visibility.Visible;
+                    PlayVisibility = Visibility.Collapsed;
+                    Brush = new SolidColorBrush(_originalColor);
+                    GlowColor = _originalColor;
+                }
+                OnPropertyChanged("PlayVisibility");
+                OnPropertyChanged("PauseVisibility");
+                OnPropertyChanged("Brush");
+                OnPropertyChanged("GlowColor");
+            }
+        }
         public Visibility SubVisibility { get; set; }
         public Visibility CancelVisibility { get; set; } = Visibility.Collapsed;
         public Visibility DisplayVisibility { get; set; } = Visibility.Visible;
-        private string displayVal = "";
+        public Visibility PauseVisibility { get; set; } = Visibility.Visible;
+        public Visibility PlayVisibility { get; set; } = Visibility.Collapsed;
         public SolidColorBrush Brush { get; set; }
         public Color GlowColor { get; set; }
+        private Color _originalColor;
         public string DisplayVal
         {
-            get { return displayVal; }
+            get { return _displayVal; }
             set
             {
                 long val = long.Parse(value);
                 TimeSpan span = TimeSpan.FromSeconds(val);
                 if (val < 60)
                 {
-                    displayVal = new DateTime(span.Ticks).ToString("ss");
+                    _displayVal = new DateTime(span.Ticks).ToString("ss");
                 }
                 else if (val >= 60 && val < 3600)
                 {
-                    displayVal = new DateTime(span.Ticks).ToString("mm:ss");
+                    _displayVal = new DateTime(span.Ticks).ToString("mm:ss");
                 }
-                else { displayVal = new DateTime(span.Ticks).ToString("HH:mm:ss"); }
+                else { _displayVal = new DateTime(span.Ticks).ToString("HH:mm:ss"); }
                 OnPropertyChanged("DisplayVal");
             }
         }
-
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
         public Timer(long seconds)
         {
             CurrVal = seconds;
@@ -101,6 +124,7 @@ namespace Timers
             int b = rnd.Next(130, 255);
             Brush = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
             GlowColor = Brush.Color;
+            _originalColor = Brush.Color;
             DisplayVal = CurrVal.ToString();
             _soundThread = new Thread(() =>
             {

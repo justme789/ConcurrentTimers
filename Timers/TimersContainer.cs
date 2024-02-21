@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Threading;
 
 namespace Timers
@@ -20,13 +14,17 @@ namespace Timers
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
             timer.Start();
-            
+
         }
         private void Timer_Tick(object? sender, EventArgs e)
         {
             if (Timers.Count > 0)
             {
                 Timer currentTimer = Timers[0];
+                if (currentTimer.IsPaused)
+                {
+                    return;
+                }
                 if (currentTimer.Finished)
                 {
                     if (currentTimer.Cancelled)
@@ -45,7 +43,7 @@ namespace Timers
                     currentTimer.Finished = true;
                     return;
                 }
-                
+
                 currentTimer.CurrVal--;
                 currentTimer.DisplayVal = currentTimer.CurrVal + "";
             }

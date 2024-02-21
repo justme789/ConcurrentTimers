@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace Timers
 {
@@ -32,6 +21,11 @@ namespace Timers
         private void CancelTimer_MouseUp(object sender, MouseButtonEventArgs e)
         {
             ((Timer)((Border)sender).DataContext).Cancelled = true;
+        }
+
+        private void PlayPauseButton_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            ((Timer)((Border)sender).DataContext).IsPaused = !((Timer)((Border)sender).DataContext).IsPaused;
         }
     }
 }
