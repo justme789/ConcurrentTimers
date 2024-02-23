@@ -21,7 +21,7 @@ namespace Timers
             if (Timers.Count > 0)
             {
                 Timer currentTimer = Timers[0];
-                if (currentTimer.IsPaused)
+                if (currentTimer.IsPaused || !currentTimer.Created)
                 {
                     return;
                 }

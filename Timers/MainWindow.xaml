@@ -34,7 +34,21 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <local:TimerModule Grid.Row="1" />
+                                                <Grid Margin="10,10,0,0">
+                                                    <Border
+                                                        Width="120"
+                                                        Height="120"
+                                                        Background="#dd101010"
+                                                        BorderBrush="{Binding Brush}"
+                                                        BorderThickness="2"
+                                                        CornerRadius="10">
+                                                        <Grid>
+                                                            <local:TimerModule Visibility="{Binding TickerVisibility}" />
+                                                            <local:TimerCreatorUI DataContext="{Binding}" />
+
+                                                        </Grid>
+                                                    </Border>
+                                                </Grid>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>

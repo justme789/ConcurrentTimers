@@ -11,11 +11,45 @@ namespace Timers
     {
         private Thread _soundThread;
         private bool _finished = false;
+        private bool _created = false;
         private string _displayVal = "";
         private bool _isHovered = false;
         private bool _isPaused = false;
+        private TimerCreator _currentStage;
         public long CurrVal { get; set; }
+        public TimerCreator CurrentStage
+        {
+            get
+            {
+                return _currentStage;
+            }
+            set
+            {
+                _currentStage = value;
+                OnPropertyChanged("CurrentStage");
+            }
+        }
+        public TimerCreator[] Stages
+        {
+            get; set;
+        }
         public bool Cancelled { get; set; }
+        public bool Created
+        {
+            get
+            {
+                return _created;
+            }
+            set
+            {
+                _created = value;
+                if (_created)
+                {
+                    TickerVisibility = Visibility.Visible;
+                    OnPropertyChanged("TickerVisibility");
+                }
+            }
+        }
         public bool Finished
         {
             get
@@ -88,6 +122,7 @@ namespace Timers
         public Visibility DisplayVisibility { get; set; } = Visibility.Visible;
         public Visibility PauseVisibility { get; set; } = Visibility.Visible;
         public Visibility PlayVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility TickerVisibility { get; set; } = Visibility.Collapsed;
         public SolidColorBrush Brush { get; set; }
         public Color GlowColor { get; set; }
         private Color _originalColor;
@@ -115,9 +150,8 @@ namespace Timers
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-        public Timer(long seconds)
+        public Timer()
         {
-            CurrVal = seconds;
             Random rnd = new Random();
             int r = rnd.Next(130, 255);
             int g = rnd.Next(130, 255);
@@ -125,6 +159,33 @@ namespace Timers
             Brush = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
             GlowColor = Brush.Color;
             _originalColor = Brush.Color;
+
+            TimerCreator timerStage1 = new TimerCreator();
+            timerStage1.Header = "HH";
+            timerStage1.ConfirmVisibility = Visibility.Collapsed;
+            timerStage1.NextVisibility = Visibility.Visible;
+            timerStage1.PreviousVisibility = Visibility.Collapsed;
+            TimerCreator timerStage2 = new TimerCreator();
+            timerStage2.ConfirmVisibility = Visibility.Collapsed;
+            timerStage2.Header = "mm";
+            timerStage2.NextVisibility = Visibility.Visible;
+            timerStage2.PreviousVisibility = Visibility.Visible;
+            TimerCreator timerStage3 = new TimerCreator();
+            timerStage3.Header = "ss";
+            timerStage3.ConfirmVisibility = Visibility.Visible;
+            timerStage3.NextVisibility = Visibility.Collapsed;
+            timerStage3.PreviousVisibility = Visibility.Visible;
+            Stages = new TimerCreator[3] { timerStage1, timerStage2, timerStage3 };
+            CurrentStage = Stages[0];
+        }
+        public void CreateTimer()
+        {
+            long seconds = 0;
+            for (int i = 0; i < Stages.Length; i++)
+            {
+                seconds += long.Parse(Stages[i].Value) * (long)Math.Pow(60, Stages.Length - 1 - i);
+            }
+            CurrVal = seconds;
             DisplayVal = CurrVal.ToString();
             _soundThread = new Thread(() =>
             {
@@ -133,6 +194,7 @@ namespace Timers
                 while (!Cancelled) { }
                 player.Stop();
             });
+            Created = true;
         }
         public void FinishTimer()
         {

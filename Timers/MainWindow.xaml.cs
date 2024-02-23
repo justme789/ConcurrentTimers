@@ -23,7 +23,7 @@ namespace Timers
             if (e.Key == Key.A)
             {
                 Random rnd = new Random();
-                timers[rnd.Next(timers.Count)].Timers.Add(new Timer(rnd.Next(10)));
+                timers[rnd.Next(timers.Count)].Timers.Add(new Timer());
             }
             if (e.Key == Key.C)
             {
@@ -34,7 +34,7 @@ namespace Timers
 
         private void Border_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            ((TimersContainer)((Border)sender).DataContext).Timers.Add(new Timer(10));
+            ((TimersContainer)((Border)sender).DataContext).Timers.Add(new Timer());
         }
 
         private void Border_MouseUp_1(object sender, MouseButtonEventArgs e)

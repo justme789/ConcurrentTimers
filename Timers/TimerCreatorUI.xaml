@@ -1,0 +1,117 @@
+﻿<UserControl
+    x:Class="Timers.TimerCreatorUI"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Timers"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid x:Name="TimerCreator">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="25" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="25" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="25" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Border
+            Name="PreviousButton"
+            Grid.Row="4"
+            Grid.Column="1"
+            Padding="4"
+            Background="Transparent"
+            MouseUp="PreviousButton_MouseUp"
+            Visibility="{Binding CurrentStage.PreviousVisibility}">
+            <Path
+                Data="M5.00055 11.4L0.000549316 6.4V5L5.00055 0L6.42055 1.4L3.14055 4.7H14.2806V6.7H3.14055L6.44055 10L5.00055 11.4Z"
+                Fill="{Binding Brush}"
+                Stretch="Uniform"
+                Stroke="{Binding Brush}" />
+        </Border>
+        <Border
+            Name="NextButton"
+            Grid.Row="4"
+            Grid.Column="7"
+            Padding="4"
+            Background="Transparent"
+            MouseUp="NextButton_MouseUp"
+            Visibility="{Binding CurrentStage.NextVisibility}">
+            <Path
+                Data="M9.74049 0L14.5842 5V6.4L9.74049 11.4001L8.36486 10L11.5424 6.7H0.750488V4.7H11.5424L8.34549 1.4L9.74049 0Z"
+                Fill="{Binding Brush}"
+                Stretch="Uniform"
+                Stroke="{Binding Brush}" />
+        </Border>
+        <Border
+            Name="ConfirmButton"
+            Grid.Row="4"
+            Grid.Column="7"
+            Padding="4"
+            Background="Transparent"
+            BorderBrush="{Binding Brush}"
+            BorderThickness="1"
+            CornerRadius="15"
+            MouseUp="ConfirmButton_MouseUp"
+            Visibility="{Binding CurrentStage.ConfirmVisibility}">
+            <Path
+                Data="M8 0.424958L2.62678 7L2.12517 6.97646L0 3.84017L0.519144 3.46229L2.40822 6.25012L7.51591 0L8 0.424958Z"
+                Fill="{Binding Brush}"
+                Stretch="Uniform"
+                Stroke="{Binding Brush}" />
+        </Border>
+
+        <Border
+            Grid.Row="3"
+            Grid.RowSpan="3"
+            Grid.Column="3"
+            Grid.ColumnSpan="3"
+            Background="Transparent"
+            BorderBrush="{Binding Brush}"
+            BorderThickness="2"
+            CornerRadius="6">
+            <TextBox
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                FontFamily="Consolas"
+                FontSize="20"
+                Foreground="#fff"
+                MaxLength="2"
+                PreviewTextInput="NumberValidationTextBox"
+                DataObject.Pasting="TextBox_Pasting"
+                Text="{Binding CurrentStage.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                TextAlignment="Center">
+                <TextBox.CaretBrush>
+                    <SolidColorBrush Color="{Binding GlowColor}" />
+                </TextBox.CaretBrush>
+            </TextBox>
+        </Border>
+        <TextBlock
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="4"
+            Padding="3"
+            FontFamily="Consolas"
+            FontSize="16"
+            Foreground="{Binding Brush}"
+            Text="{Binding CurrentStage.Header}" />
+    </Grid>
+</UserControl>
