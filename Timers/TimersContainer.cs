@@ -7,20 +7,19 @@ namespace Timers
     public class TimersContainer
     {
         DispatcherTimer timer;
-        public ObservableCollection<Timer> Timers { get; set; } = new ObservableCollection<Timer>();
+        public ObservableCollection<TimerViewModel> Timers { get; set; } = new ObservableCollection<TimerViewModel>();
         public TimersContainer()
         {
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
             timer.Start();
-
         }
         private void Timer_Tick(object? sender, EventArgs e)
         {
             if (Timers.Count > 0)
             {
-                Timer currentTimer = Timers[0];
+                TimerViewModel currentTimer = Timers[0];
                 if (currentTimer.IsPaused || !currentTimer.Created)
                 {
                     return;
@@ -29,23 +28,18 @@ namespace Timers
                 {
                     if (currentTimer.Cancelled)
                     {
-                        Timers.RemoveAt(0);
 
-                        return;
+                        Timers.RemoveAt(0);
                     }
-                    else
-                    {
-                        return;
-                    }
+                    return;
                 }
-                if (currentTimer.CurrVal <= 0)
+                if (currentTimer.CurrentValue <= 0)
                 {
                     currentTimer.Finished = true;
                     return;
                 }
-
-                currentTimer.CurrVal--;
-                currentTimer.DisplayVal = currentTimer.CurrVal + "";
+                currentTimer.CurrentValue--;
+                currentTimer.DisplayVal = currentTimer.CurrentValue + "";
             }
         }
     }

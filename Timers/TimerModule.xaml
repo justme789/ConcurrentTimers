@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Grid
+        Background="Transparent"
         DataContext="{Binding}"
         MouseEnter="Grid_MouseEnter"
         MouseLeave="Grid_MouseLeave">
@@ -19,13 +20,22 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="30" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="22" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="30" />
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="5"
+            Height="20"
+            HorizontalAlignment="Right"
+            Background="Transparent"
+            FontSize="16"
+            Text="{Binding RepeatedValue}"
+            Visibility="{Binding RepeatedVisibility}" />
         <Border
             x:Name="CancelTimer"
             Grid.Row="1"
@@ -42,25 +52,19 @@
                 Stretch="Uniform"
                 Stroke="{Binding Brush}" />
         </Border>
-        <TextBlock
-            Grid.Row="2"
-            Grid.ColumnSpan="10"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontFamily="Consolas"
-            FontSize="24"
-            FontWeight="Bold"
-            Foreground="{Binding Brush}"
-            Text="{Binding DisplayVal}"
-            Visibility="{Binding DisplayVisibility}">
-            <TextBlock.Effect>
-                <DropShadowEffect
-                    BlurRadius="6"
-                    Opacity="1"
-                    ShadowDepth="0"
-                    Color="{Binding GlowColor}" />
-            </TextBlock.Effect>
-        </TextBlock>
+        <Viewbox Grid.Row="2" Grid.ColumnSpan="10">
+            <TextBlock
+                Margin="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                FontFamily="Consolas"
+                FontWeight="Thin"
+                Foreground="{Binding Brush}"
+                Text="{Binding DisplayVal}"
+                TextAlignment="Center"
+                TextWrapping="Wrap"
+                Visibility="{Binding DisplayVisibility}" />
+        </Viewbox>
         <Grid
             Grid.Row="3"
             Grid.Column="1"
@@ -74,7 +78,7 @@
                     Data="M0.000488281 0.125V24.5035L18.0004 12.2525L0.000488281 0.125ZM3.00049 5.94115L12.6206 12.2525L3.00049 18.6875V5.94115Z"
                     Fill="{Binding Brush}"
                     Stretch="Uniform"
-                    Stroke="{Binding Brush}"
+                    Stroke="{Binding OriginalColor}"
                     Visibility="{Binding PlayVisibility}" />
             </Border>
             <Border
@@ -90,7 +94,32 @@
                     Visibility="{Binding PauseVisibility}" />
             </Border>
         </Grid>
-
+        <Border
+            x:Name="RepeatButton"
+            Grid.Row="3"
+            Grid.Column="5"
+            Background="Transparent"
+            MouseUp="RepeatButton_MouseUp">
+            <Path
+                Data="M3.51974 12.5005L1.36879 14.8126L0.00012207 13.3688L3.66743 9.48756L5.001 9.50631L8.66832 13.4813L7.33475 14.9063L5.28786 12.6937C5.62006 17.5474 9.41057 21.375 14.0377 21.375C17.3903 21.375 20.3036 19.3656 21.7806 16.4124L23.2077 17.5311C21.4002 20.9454 17.9708 23.25 14.0377 23.25C8.38007 23.25 3.76476 18.4815 3.51974 12.5005ZM22.8043 11.626L20.6353 9.28134L19.3017 10.7063L22.969 14.6626L24.3026 14.6813L27.9699 10.8001L26.6539 9.37509L24.559 11.5876C24.3558 5.56543 19.723 0.75 14.0377 0.75C10.2428 0.75 6.91678 2.89551 5.06414 6.11331L6.48484 7.22692C8.01289 4.47199 10.8234 2.625 14.0377 2.625C18.766 2.625 22.6205 6.62169 22.8043 11.626Z"
+                Fill="{Binding Brush}"
+                Stretch="Uniform"
+                Stroke="AliceBlue"
+                Visibility="{Binding SubVisibility}" />
+        </Border>
+        <Border
+            Name="CLoseButton"
+            Grid.Row="3"
+            Grid.Column="3"
+            Background="Transparent"
+            MouseUp="CLoseButton_MouseUp">
+            <Path
+                Data="M11.0007 11.5911L19.6609 19.7957L21.3403 18.2047L12.6801 10.0001L21.3403 1.79559L19.6609 0.20459L11.0007 8.4091L2.3404 0.20459L0.661011 1.79559L9.32131 10.0001L0.661011 18.2047L2.3404 19.7957L11.0007 11.5911ZM11.0007 11.5911L19.6609 19.7957L21.3403 18.2047L12.6801 10.0001L21.3403 1.79559L19.6609 0.20459L11.0007 8.4091L2.3404 0.20459L0.661011 1.79559L9.32131 10.0001L0.661011 18.2047L2.3404 19.7957L11.0007 11.5911Z"
+                Fill="{Binding Brush}"
+                Stretch="Uniform"
+                Stroke="#ff9999"
+                Visibility="{Binding SubVisibility}" />
+        </Border>
         <Border
             x:Name="bufferBorder"
             Grid.Row="5"

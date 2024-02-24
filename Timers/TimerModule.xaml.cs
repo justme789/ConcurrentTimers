@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace Timers
 {
-    public partial class TimerModule
+    public partial class TimerModule : UserControl
     {
         public TimerModule()
         {
@@ -11,21 +11,32 @@ namespace Timers
         }
         private void Grid_MouseEnter(object sender, MouseEventArgs e)
         {
-            ((Timer)((Grid)sender).DataContext).Hovered = true;
+            ((TimerViewModel)((Grid)sender).DataContext).Hovered = true;
         }
 
         private void Grid_MouseLeave(object sender, MouseEventArgs e)
         {
-            ((Timer)((Grid)sender).DataContext).Hovered = false;
+            ((TimerViewModel)((Grid)sender).DataContext).Hovered = false;
         }
         private void CancelTimer_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            ((Timer)((Border)sender).DataContext).Cancelled = true;
+            ((TimerViewModel)((Border)sender).DataContext).Cancelled = true;
         }
 
         private void PlayPauseButton_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            ((Timer)((Border)sender).DataContext).IsPaused = !((Timer)((Border)sender).DataContext).IsPaused;
+            ((TimerViewModel)((Border)sender).DataContext).IsPaused = !((TimerViewModel)((Border)sender).DataContext).IsPaused;
+        }
+
+        private void RepeatButton_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            ((TimerViewModel)((Border)sender).DataContext).IsRepeated = !((TimerViewModel)((Border)sender).DataContext).IsRepeated;
+        }
+
+        private void CLoseButton_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            TimerViewModel dataContextTimer = ((TimerViewModel)((Border)sender).DataContext);
+            dataContextTimer.Container.Timers.Remove(dataContextTimer);
         }
     }
 }

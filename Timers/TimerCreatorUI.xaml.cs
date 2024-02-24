@@ -23,19 +23,19 @@ namespace Timers
 
         private void PreviousButton_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            Timer currentTimer = (Timer)DataContext;
+            TimerViewModel currentTimer = (TimerViewModel)DataContext;
             currentTimer.CurrentStage = currentTimer.Stages[--_currStage];
         }
 
         private void NextButton_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            Timer currentTimer = (Timer)DataContext;
+            TimerViewModel currentTimer = (TimerViewModel)DataContext;
             currentTimer.CurrentStage = currentTimer.Stages[++_currStage];
         }
 
         private void ConfirmButton_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            Timer currentTimer = (Timer)DataContext;
+            TimerViewModel currentTimer = (TimerViewModel)DataContext;
             this.Visibility = System.Windows.Visibility.Collapsed;
             currentTimer.CreateTimer();
         }
