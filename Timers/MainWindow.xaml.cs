@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,7 +13,9 @@ namespace Timers
     /// </summary>
     public partial class MainWindow : Window
     {
-        ObservableCollection<TimersContainer> timers = new ObservableCollection<TimersContainer>();
+        ObservableCollection<TimersContainerViewModel> timers = new ObservableCollection<TimersContainerViewModel>();
+        List<TimersContainer> actual = new List<TimersContainer>();
+        Dictionary<TimerViewModel, TimersContainerViewModel> timerToContainer = new Dictionary<TimerViewModel, TimersContainerViewModel>();
         public MainWindow()
         {
             InitializeComponent();
@@ -18,7 +23,7 @@ namespace Timers
         }
         private void Border_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            TimersContainer currentDataContext = (TimersContainer)((Border)sender).DataContext;
+            TimersContainerViewModel currentDataContext = (TimersContainerViewModel)((Border)sender).DataContext;
             if (currentDataContext.Timers.Count > 0)
             {
                 if (currentDataContext.Timers[^1].Finished || !currentDataContext.Timers[^1].Created)
@@ -26,14 +31,15 @@ namespace Timers
                     return;
                 }
             }
-            Timer timer = new Timer { Container = currentDataContext };
-            currentDataContext.Timers.Add(new TimerViewModel(timer));
-            e.Handled = true;
+            Timer timer = new Timer();
+            currentDataContext.AddTimer(timer);
         }
-
         private void Border_MouseUp_1(object sender, MouseButtonEventArgs e)
         {
-            timers.Add(new TimersContainer());
+            TimersContainer timersContainer = new TimersContainer();
+            TimersContainerViewModel theViewModel = new TimersContainerViewModel(timersContainer);
+            timers.Add(theViewModel);
+            actual.Add(timersContainer);
         }
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -42,6 +48,28 @@ namespace Timers
                 this.DragMove();
             }
             e.Handled = false;
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.S)
+            {
+                string json = JsonConvert.SerializeObject(actual);
+                using (StreamWriter writer = new StreamWriter(@"C:\Users\nobod\OneDrive\Desktop\tttt.json"))
+                {
+                    writer.Write(json);
+                }
+            }
+            if (e.Key == Key.D)
+            {
+                string json = File.ReadAllText(@"C:\Users\nobod\OneDrive\Desktop\tttt.json");
+                List<TimersContainer> containers = JsonConvert.DeserializeObject<List<TimersContainer>>(json);
+                foreach (TimersContainer container in containers)
+                {
+                    actual.Add(container);
+                    timers.Add(new TimersContainerViewModel(container));
+                }
+            }
         }
     }
 }

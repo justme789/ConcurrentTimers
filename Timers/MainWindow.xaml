@@ -8,6 +8,7 @@
     Title="MainWindow"
     Width="800"
     Height="450"
+    KeyDown="Window_KeyDown"
     ResizeMode="NoResize"
     Topmost="False"
     WindowStyle="None"
@@ -58,7 +59,7 @@
 
                                                     <Grid>
                                                         <local:TimerModule Visibility="{Binding TickerVisibility}" />
-                                                        <local:TimerCreatorUI DataContext="{Binding}" />
+                                                        <local:TimerCreatorUI Visibility="{Binding SetupVisibility}" />
                                                     </Grid>
                                                     <Border.Effect>
                                                         <DropShadowEffect

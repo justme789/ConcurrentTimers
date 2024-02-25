@@ -1,47 +1,21 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows.Threading;
+﻿using System.Collections.Generic;
 
 namespace Timers
 {
     public class TimersContainer
     {
-        DispatcherTimer timer;
-        public ObservableCollection<TimerViewModel> Timers { get; set; } = new ObservableCollection<TimerViewModel>();
+        public List<Timer> Timers { get; set; }
         public TimersContainer()
         {
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += Timer_Tick;
-            timer.Start();
+            Timers = new List<Timer>();
         }
-        private void Timer_Tick(object? sender, EventArgs e)
+        public void AddTimer(Timer timer)
         {
-            if (Timers.Count > 0)
-            {
-                TimerViewModel currentTimer = Timers[0];
-                if (currentTimer.IsPaused || !currentTimer.Created)
-                {
-                    return;
-                }
-                if (currentTimer.Finished)
-                {
-                    if (currentTimer.Cancelled)
-                    {
-
-                        Timers.RemoveAt(0);
-                    }
-                    return;
-                }
-                if (currentTimer.CurrentValue <= 0)
-                {
-                    currentTimer.Finished = true;
-                    return;
-                }
-                currentTimer.CurrentValue--;
-                currentTimer.DisplayVal = currentTimer.CurrentValue + "";
-            }
+            Timers.Add(timer);
+        }
+        public void RemoveTimer(Timer timer)
+        {
+            Timers.Add(timer);
         }
     }
-
 }

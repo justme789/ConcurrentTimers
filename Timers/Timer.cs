@@ -1,17 +1,13 @@
-﻿using System.Threading;
+﻿using System.IO;
+using System.Media;
 
 namespace Timers
 {
     public class Timer
     {
-        private Thread _soundThread;
-        private bool _finished = false;
-        private bool _created = false;
-        private bool _isPaused = false;
+        private bool _cancelled = false;
         private int _repeatedValue = 0;
-
-
-        public TimersContainer Container { get; set; }
+        private SoundPlayer _player;
         public int RepeatedValue { get => _repeatedValue; set => _repeatedValue = value; }
         public bool IsRepeated
         { get; set; }
@@ -20,20 +16,26 @@ namespace Timers
         public bool Finished { get; set; }
         public bool IsPaused { get; set; }
         public long OriginalValue { get; set; }
-        public bool Cancelled { get; set; }
+        public bool Cancelled
+        {
+            get => _cancelled;
+            set
+            {
+                _cancelled = value;
+                if (_cancelled)
+                {
+                    _player.Stop();
+                }
+            }
+
+        }
         public Timer()
         {
-            _soundThread = new Thread(() =>
-            {
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(@"C:\Users\nobod\source\repos\Timers\Timers\soft.wav");
-                player.Play();
-                while (!Cancelled) { }
-                player.Stop();
-            });
+            _player = new System.Media.SoundPlayer(@$"{Directory.GetCurrentDirectory()}\soft.wav");
         }
         public void FinishTimer()
         {
-            _soundThread.Start();
+            _player.Play();
         }
     }
 }

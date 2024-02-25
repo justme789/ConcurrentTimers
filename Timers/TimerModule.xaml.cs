@@ -5,6 +5,8 @@ namespace Timers
 {
     public partial class TimerModule : UserControl
     {
+
+
         public TimerModule()
         {
             InitializeComponent();
@@ -36,7 +38,7 @@ namespace Timers
         private void CLoseButton_MouseUp(object sender, MouseButtonEventArgs e)
         {
             TimerViewModel dataContextTimer = ((TimerViewModel)((Border)sender).DataContext);
-            dataContextTimer.Container.Timers.Remove(dataContextTimer);
+            dataContextTimer.Remove();
         }
     }
 }

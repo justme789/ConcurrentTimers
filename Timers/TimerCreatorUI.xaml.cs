@@ -36,7 +36,6 @@ namespace Timers
         private void ConfirmButton_MouseUp(object sender, MouseButtonEventArgs e)
         {
             TimerViewModel currentTimer = (TimerViewModel)DataContext;
-            this.Visibility = System.Windows.Visibility.Collapsed;
             currentTimer.CreateTimer();
         }
 
