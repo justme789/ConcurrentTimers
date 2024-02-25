@@ -1,6 +1,5 @@
 # Concurrent Timers
-The whole point of this project is that one day I wanted to do pomodoro and I also had a chicken in the oven.
-I just couldnt find any windows timer that had what i wanted so I'm doing this now.
+Ever wanted to manage your time better, a way to truly map and measure the sequential and parallel flow of time? Introducing Concurrent Timers! In all reality this is simply a visually pleasing and very intuitive way to manage your time with timers. You can create timers along the x and y axis. Timers within the x axis run sequentially, and they run in parallel within the y axis. 
 
 # End Goal
 Todo list, different OSes, super vibey, Database, Concurrent Timers
