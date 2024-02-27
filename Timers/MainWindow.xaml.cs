@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Timers
 {
@@ -62,6 +63,8 @@ namespace Timers
             }
             if (e.Key == Key.D)
             {
+                actual.Clear();
+                timers.Clear();
                 string json = File.ReadAllText(@"C:\Users\nobod\OneDrive\Desktop\tttt.json");
                 List<TimersContainer> containers = JsonConvert.DeserializeObject<List<TimersContainer>>(json);
                 foreach (TimersContainer container in containers)
@@ -70,6 +73,40 @@ namespace Timers
                     timers.Add(new TimersContainerViewModel(container));
                 }
             }
+        }
+
+        private void CloseButton_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Border theSender = sender as Border;
+            theSender.Background = new SolidColorBrush(Color.FromArgb(44, 255, 0, 0));
+        }
+
+        private void Border_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Border theSender = sender as Border;
+            theSender.Background = new SolidColorBrush(Colors.Transparent);
+
+        }
+
+        private void Border_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Border theSender = sender as Border;
+            theSender.Background = new SolidColorBrush(Color.FromArgb(100, 19, 173, 252));
+        }
+
+        private void Minimize_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void Maximize_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+
+        private void CloseButton_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -10,7 +10,6 @@
     Height="450"
     KeyDown="Window_KeyDown"
     ResizeMode="NoResize"
-    Topmost="False"
     WindowStyle="None"
     mc:Ignorable="d">
     <Grid Background="Transparent">
@@ -18,10 +17,61 @@
             <RowDefinition Height="27" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Border
-            Grid.Row="0"
-            Background="#1f1f1f"
-            PreviewMouseDown="Window_MouseDown" />
+
+        <Grid Background="#1f1f1f">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="43" />
+                <ColumnDefinition Width="43" />
+                <ColumnDefinition Width="43" />
+            </Grid.ColumnDefinitions>
+            <Border
+                Grid.Column="0"
+                Background="Transparent"
+                PreviewMouseDown="Window_MouseDown" />
+            <Border
+                Name="Minimize"
+                Grid.Column="1"
+                Padding="12"
+                Background="Transparent"
+                MouseEnter="Border_MouseEnter"
+                MouseLeave="Border_MouseLeave"
+                MouseUp="Minimize_MouseUp">
+                <Path
+                    Data="M208,134.4H48c-3.534,0-6.4-2.866-6.4-6.4s2.866-6.4,6.4-6.4h160c3.534,0,6.4,2.866,6.4,6.4S211.534,134.4,208,134.4z"
+                    Fill="White"
+                    Opacity="0.3"
+                    Stretch="Uniform" />
+            </Border>
+            <Border
+                Name="Maximize"
+                Grid.Column="2"
+                Padding="7"
+                Background="Transparent"
+                MouseEnter="Border_MouseEnter"
+                MouseLeave="Border_MouseLeave"
+                MouseUp="Maximize_MouseUp">
+                <Path
+                    Data="M5.75 3H18.25C19.7688 3 21 4.23122 21 5.75V18.25C21 19.7688 19.7688 21 18.25 21H5.75C4.23122 21 3 19.7688 3 18.25V5.75C3 4.23122 4.23122 3 5.75 3ZM5.75 4.5C5.05964 4.5 4.5 5.05964 4.5 5.75V18.25C4.5 18.9404 5.05964 19.5 5.75 19.5H18.25C18.9404 19.5 19.5 18.9404 19.5 18.25V5.75C19.5 5.05964 18.9404 4.5 18.25 4.5H5.75Z"
+                    Fill="White"
+                    Opacity="0.3"
+                    Stretch="Uniform" />
+            </Border>
+            <Border
+                Name="CloseButton"
+                Grid.Column="3"
+                Padding="7"
+                Background="Transparent"
+                MouseEnter="CloseButton_MouseEnter"
+                MouseLeave="Border_MouseLeave"
+                MouseUp="CloseButton_MouseUp">
+                <Path
+                    Data="M38 12.83l-2.83-2.83-11.17 11.17-11.17-11.17-2.83 2.83 11.17 11.17-11.17 11.17 2.83 2.83 11.17-11.17 11.17 11.17 2.83-2.83-11.17-11.17z"
+                    Fill="White"
+                    Opacity="0.3"
+                    Stretch="Uniform" />
+            </Border>
+        </Grid>
         <Border Grid.Row="1" Background="#202020">
             <ScrollViewer
                 Focusable="False"

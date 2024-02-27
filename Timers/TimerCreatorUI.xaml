@@ -95,6 +95,7 @@
                 Foreground="#fff"
                 MaxLength="2"
                 PreviewTextInput="NumberValidationTextBox"
+                SelectionBrush="{Binding Brush}"
                 Text="{Binding CurrentStage.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 TextAlignment="Center">
                 <TextBox.CaretBrush>

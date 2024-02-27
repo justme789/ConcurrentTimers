@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace Timers
 {
@@ -10,6 +11,7 @@ namespace Timers
     {
         private string _displayVal = "";
         private bool _isHovered = false;
+        private DispatcherTimer _colorChanger;
         public Timer Timer { get; }
 
         public int RepeatedValue { get { return Timer.RepeatedValue; } }
@@ -58,7 +60,14 @@ namespace Timers
         {
             get; set;
         }
-        public bool Cancelled { get => Timer.Cancelled; set => Timer.Cancelled = value; }
+        public bool Cancelled
+        {
+            get => Timer.Cancelled; set
+            {
+                Timer.Cancelled = value;
+                _colorChanger.Stop();
+            }
+        }
         public bool Created
         {
             get
@@ -98,6 +107,7 @@ namespace Timers
                         CancelVisibility = Visibility.Visible;
                         DisplayVisibility = Visibility.Collapsed;
                         Timer.FinishTimer();
+                        _colorChanger.Start();
                     }
                 }
                 else
@@ -207,6 +217,9 @@ namespace Timers
             Brush = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
             GlowColor = Brush.Color;
             OriginalColor = Brush.Color;
+            _colorChanger = new DispatcherTimer();
+            _colorChanger.Interval = TimeSpan.FromMilliseconds(100);
+            _colorChanger.Tick += ColorChanger_Tick;
             if (!timer.Created)
             {
                 TimerCreator timerStage1 = new TimerCreator();
@@ -257,6 +270,17 @@ namespace Timers
         internal void Remove()
         {
             RemoveTimer?.Invoke(this, new RemoveTimerEvent { TimerToRemove = this });
+        }
+        private void ColorChanger_Tick(object? sender, EventArgs e)
+        {
+            Random rnd = new Random();
+            int r = rnd.Next(130, 255);
+            int g = rnd.Next(130, 255);
+            int b = rnd.Next(130, 255);
+            Brush = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
+            GlowColor = Brush.Color;
+            OnPropertyChanged("Brush");
+            OnPropertyChanged("GlowColor");
         }
     }
 }
