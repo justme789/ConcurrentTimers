@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace Timers
+namespace Timers.TimerObjects
 {
     public class TimerViewModel : INotifyPropertyChanged
     {
@@ -210,12 +210,7 @@ namespace Timers
         public TimerViewModel(Timer timer)
         {
             Timer = timer;
-            Random rnd = new Random();
-            int r = rnd.Next(130, 255);
-            int g = rnd.Next(130, 255);
-            int b = rnd.Next(130, 255);
-            Brush = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
-            GlowColor = Brush.Color;
+            BrushCreator();
             OriginalColor = Brush.Color;
             _colorChanger = new DispatcherTimer();
             _colorChanger.Interval = TimeSpan.FromMilliseconds(100);
@@ -262,6 +257,7 @@ namespace Timers
             TickerVisibility = Visibility.Visible;
             SetupVisibility = Visibility.Collapsed;
             SubVisibility = Visibility.Collapsed;
+            CurrentValue = Timer.OriginalValue;
             DisplayVal = CurrentValue.ToString();
             IsRepeated = Timer.IsRepeated;
             OnPropertyChanged(nameof(TickerVisibility));
@@ -273,14 +269,18 @@ namespace Timers
         }
         private void ColorChanger_Tick(object? sender, EventArgs e)
         {
-            Random rnd = new Random();
-            int r = rnd.Next(130, 255);
-            int g = rnd.Next(130, 255);
-            int b = rnd.Next(130, 255);
-            Brush = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
-            GlowColor = Brush.Color;
+            BrushCreator();
             OnPropertyChanged("Brush");
             OnPropertyChanged("GlowColor");
+        }
+        public void BrushCreator()
+        {
+            Random rnd = new Random();
+            int r = rnd.Next(160, 255);
+            int g = rnd.Next(160, 255);
+            int b = rnd.Next(160, 255);
+            Brush = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
+            GlowColor = Brush.Color;
         }
     }
 }

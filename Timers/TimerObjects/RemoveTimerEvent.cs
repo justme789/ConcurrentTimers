@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Timers
+namespace Timers.TimerObjects
 {
     public class RemoveTimerEvent : EventArgs
     {

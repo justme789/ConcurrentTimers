@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Timers.TimerObjects;
 
 namespace Timers
 {
@@ -53,24 +55,38 @@ namespace Timers
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.S)
+            if (e.Key == Key.S && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
-                string json = JsonConvert.SerializeObject(actual);
-                using (StreamWriter writer = new StreamWriter(@"C:\Users\nobod\OneDrive\Desktop\tttt.json"))
+                SaveFileDialog saveDialog = new SaveFileDialog();
+                saveDialog.Filter = "Timer File|*.TIMER";
+                saveDialog.Title = "Save Timer";
+                saveDialog.ShowDialog();
+                if (saveDialog.FileName != "")
                 {
-                    writer.Write(json);
+                    string json = JsonConvert.SerializeObject(actual);
+                    using (StreamWriter writer = new StreamWriter(saveDialog.FileName))
+                    {
+                        writer.Write(json);
+                    }
                 }
             }
-            if (e.Key == Key.D)
+            if (e.Key == Key.L && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
-                actual.Clear();
-                timers.Clear();
-                string json = File.ReadAllText(@"C:\Users\nobod\OneDrive\Desktop\tttt.json");
-                List<TimersContainer> containers = JsonConvert.DeserializeObject<List<TimersContainer>>(json);
-                foreach (TimersContainer container in containers)
+                OpenFileDialog openDialog = new OpenFileDialog();
+                openDialog.Filter = "Timer File|*.TIMER";
+                openDialog.Title = "Save Timer";
+                openDialog.ShowDialog();
+                if (openDialog.FileName != "")
                 {
-                    actual.Add(container);
-                    timers.Add(new TimersContainerViewModel(container));
+                    actual.Clear();
+                    timers.Clear();
+                    string json = File.ReadAllText(openDialog.FileName);
+                    List<TimersContainer> containers = JsonConvert.DeserializeObject<List<TimersContainer>>(json);
+                    foreach (TimersContainer container in containers)
+                    {
+                        actual.Add(container);
+                        timers.Add(new TimersContainerViewModel(container));
+                    }
                 }
             }
         }

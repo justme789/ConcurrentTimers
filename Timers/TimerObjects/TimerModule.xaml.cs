@@ -1,7 +1,8 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
+using Timers.ToDoList;
 
-namespace Timers
+namespace Timers.TimerObjects
 {
     public partial class TimerModule : UserControl
     {
@@ -39,6 +40,13 @@ namespace Timers
         {
             TimerViewModel dataContextTimer = ((TimerViewModel)((Border)sender).DataContext);
             dataContextTimer.Remove();
+        }
+
+        private void ToDoList_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            TimerViewModel dataContextTimer = ((TimerViewModel)((Border)sender).DataContext);
+            ToDoListHolder theHolder = new ToDoListHolder(dataContextTimer);
+            theHolder.Show();
         }
     }
 }

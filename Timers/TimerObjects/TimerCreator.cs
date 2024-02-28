@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Windows;
 
-namespace Timers
+namespace Timers.TimerObjects
 {
     public class TimerCreator : INotifyPropertyChanged
     {

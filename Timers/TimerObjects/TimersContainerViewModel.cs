@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
 
-namespace Timers
+namespace Timers.TimerObjects
 {
     public class TimersContainerViewModel
     {

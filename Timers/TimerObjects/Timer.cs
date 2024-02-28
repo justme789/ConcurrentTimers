@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Media;
 
-namespace Timers
+namespace Timers.TimerObjects
 {
     public class Timer
     {
@@ -31,7 +31,7 @@ namespace Timers
         }
         public Timer()
         {
-            _player = new System.Media.SoundPlayer(@$"{Directory.GetCurrentDirectory()}\soft.wav");
+            _player = new SoundPlayer(@$"{Directory.GetCurrentDirectory()}\soft.wav");
         }
         public void FinishTimer()
         {
