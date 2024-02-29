@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Timers.ToDoList;
 
 namespace Timers.TimerObjects
 {
@@ -13,7 +14,7 @@ namespace Timers.TimerObjects
         private bool _isHovered = false;
         private DispatcherTimer _colorChanger;
         public Timer Timer { get; }
-
+        private ToDoListHolder _toDos;
         public int RepeatedValue { get { return Timer.RepeatedValue; } }
         public bool IsRepeated
         {
@@ -210,6 +211,7 @@ namespace Timers.TimerObjects
         public TimerViewModel(Timer timer)
         {
             Timer = timer;
+
             BrushCreator();
             OriginalColor = Brush.Color;
             _colorChanger = new DispatcherTimer();
@@ -239,6 +241,7 @@ namespace Timers.TimerObjects
             {
                 InitializeTimer();
             }
+            _toDos = new ToDoListHolder(this);
         }
         public void CreateTimer()
         {
