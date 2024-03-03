@@ -8,7 +8,10 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Border CornerRadius="4" BorderThickness="1" BorderBrush="#fff">
+    <Border
+        BorderBrush="#fff"
+        BorderThickness="1"
+        CornerRadius="4">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*" />
@@ -16,13 +19,73 @@
                 <ColumnDefinition Width="40" />
             </Grid.ColumnDefinitions>
 
-            <TextBox Background="Transparent" BorderThickness="0" Foreground="White" Padding="4" VerticalAlignment="Center">Heee</TextBox>
+            <TextBox
+                Padding="4"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                FontFamily="Consolas"
+                Foreground="#44ffffff"
+                GotFocus="TextBox_GotFocus"
+                IsReadOnly="{Binding EditableTextBox}">
+                Enter TODO Name here
+                <TextBox.CaretBrush>
+                    <SolidColorBrush Color="#fff" />
+                </TextBox.CaretBrush>
+            </TextBox>
             <Border
+                Name="Cancel"
                 Grid.Column="1"
-                Background="Red" />
+                Padding="11"
+                MouseUp="Cancel_MouseUp"
+                Visibility="{Binding CancelFinishVisibility}">
+                <Path
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Data="M11.0007 11.5911L19.6609 19.7957L21.3403 18.2047L12.6801 10.0001L21.3403 1.79559L19.6609 0.20459L11.0007 8.4091L2.3404 0.20459L0.661011 1.79559L9.32131 10.0001L0.661011 18.2047L2.3404 19.7957L11.0007 11.5911Z"
+                    Stroke="#ff6666">
+                    <Path.Effect>
+                        <DropShadowEffect ShadowDepth="0" Color="Red" />
+                    </Path.Effect>
+                </Path>
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#33ff6666" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
             <Border
+                Name="Finish"
                 Grid.Column="2"
-                Background="Green" />
+                Padding="12"
+                MouseUp="Finish_MouseUp"
+                Visibility="{Binding CancelFinishVisibility}">
+                <Path
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Data="M8 0.424958L2.62678 7L2.12517 6.97646L0 3.84017L0.519144 3.46229L2.40822 6.25012L7.51591 0L8 0.424958Z"
+                    Stretch="Uniform"
+                    Stroke="{Binding ParentBrush}">
+                    <Path.Effect>
+                        <DropShadowEffect ShadowDepth="0" Color="AliceBlue" />
+                    </Path.Effect>
+                </Path>
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2466ff99" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
         </Grid>
     </Border>
 </UserControl>

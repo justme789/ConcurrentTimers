@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Timers.ToDoList
 {
@@ -23,6 +12,28 @@ namespace Timers.ToDoList
         public ToDoItem()
         {
             InitializeComponent();
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox theSender = sender as TextBox;
+            if (!theSender.IsReadOnly)
+            {
+                theSender.Text = "";
+                theSender.Foreground = new SolidColorBrush(Colors.White);
+            }
+        }
+        private void Cancel_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ToDoViewModel theDataContext = ((Border)sender).DataContext as ToDoViewModel;
+            theDataContext.Remove();
+        }
+
+        private void Finish_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ToDoViewModel theDataContext = ((Border)sender).DataContext as ToDoViewModel;
+            theDataContext.Created = true;
+
         }
     }
 }

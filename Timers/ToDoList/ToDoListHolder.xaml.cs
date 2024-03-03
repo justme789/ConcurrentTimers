@@ -21,33 +21,20 @@ namespace Timers.ToDoList
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+        private TimerViewModel _theParent;
         private SolidColorBrush _timerBrush;
-        private bool _closing;
         public SolidColorBrush TimerBrush
         {
-            get => _timerBrush; set
-            {
-                _timerBrush = value;
-                OnPropertyChanged(nameof(TimerBrush));
-            }
+            get => _theParent.Brush;
         }
         public ToDoListHolder(TimerViewModel theParentTimer)
         {
             InitializeComponent();
-            _timerBrush = theParentTimer.Brush;
+            _theParent = theParentTimer;
             AllToDos.ItemsSource = ToDos;
             DataContext = this;
+            OnPropertyChanged(nameof(TimerBrush));
         }
-
-        private void Window_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (!_closing)
-            {
-                this.Close();
-                _closing = true;
-            }
-        }
-
         private void Window_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Type sourceType = e.OriginalSource.GetType();
@@ -68,9 +55,27 @@ namespace Timers.ToDoList
 
         private void Border_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            ToDo toDo = new ToDo();
+            if (ToDos.Count > 0)
+            {
+                if (!ToDos[^1].Created)
+                {
+                    return;
+                }
+            }
+            ToDo toDo = new ToDo(_theParent);
             ToDoViewModel todoViewModel = new ToDoViewModel(toDo);
+            todoViewModel.RemoveToDo += TodoViewModel_RemoveToDo;
             ToDos.Add(todoViewModel);
+        }
+
+        private void TodoViewModel_RemoveToDo(object sender, RemoveToDo e)
+        {
+            ToDos.Remove(e.ToDoToRemove);
+        }
+
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

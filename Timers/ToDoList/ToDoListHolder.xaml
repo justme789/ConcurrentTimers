@@ -7,10 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     AllowsTransparency="true"
     Background="Transparent"
-    LostKeyboardFocus="Window_LostFocus"
     PreviewMouseDown="Window_PreviewMouseDown"
     ResizeMode="NoResize"
     SizeToContent="WidthAndHeight"
+    Topmost="True"
     WindowStyle="None"
     mc:Ignorable="d">
     <Grid>
@@ -39,7 +39,10 @@
                 <ItemsControl x:Name="AllToDos">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <local:ToDoItem Height="40" Margin="0,0,0,10" />
+                            <local:ToDoItem
+                                Height="40"
+                                Margin="0,0,0,10"
+                                DataContext="{Binding}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
