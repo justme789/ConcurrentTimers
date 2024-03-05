@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Timers.TimerObjects;
+using Timers.ToDoList;
 
 namespace Timers
 {
@@ -17,12 +18,13 @@ namespace Timers
     public partial class MainWindow : Window
     {
         ObservableCollection<TimersContainerViewModel> timers = new ObservableCollection<TimersContainerViewModel>();
+        ObservableCollection<ToDoViewModel> todos = new ObservableCollection<ToDoViewModel>();
         List<TimersContainer> actual = new List<TimersContainer>();
-        Dictionary<TimerViewModel, TimersContainerViewModel> timerToContainer = new Dictionary<TimerViewModel, TimersContainerViewModel>();
         public MainWindow()
         {
             InitializeComponent();
             TimersList.ItemsSource = timers;
+            ToDoList.ItemsSource = todos;
         }
         private void Border_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -41,9 +43,16 @@ namespace Timers
         {
             TimersContainer timersContainer = new TimersContainer();
             TimersContainerViewModel theViewModel = new TimersContainerViewModel(timersContainer);
+            theViewModel.ToDoAdded += TheViewModel_ToDoAdded;
             timers.Add(theViewModel);
             actual.Add(timersContainer);
         }
+
+        private void TheViewModel_ToDoAdded(object sender, ToDoAdded e)
+        {
+            todos.Add(e.AddedToDo);
+        }
+
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)

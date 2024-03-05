@@ -25,10 +25,11 @@
                 Background="Transparent"
                 BorderThickness="0"
                 FontFamily="Consolas"
-                Foreground="#44ffffff"
+                Foreground="{Binding TextBrush}"
                 GotFocus="TextBox_GotFocus"
-                IsReadOnly="{Binding EditableTextBox}">
-                Enter TODO Name here
+                IsReadOnly="{Binding EditableTextBox}"
+                Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
                 <TextBox.CaretBrush>
                     <SolidColorBrush Color="#fff" />
                 </TextBox.CaretBrush>

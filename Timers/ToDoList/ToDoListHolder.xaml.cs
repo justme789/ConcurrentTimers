@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -16,7 +15,6 @@ namespace Timers.ToDoList
     public partial class ToDoListHolder : Window, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        public ObservableCollection<ToDoViewModel> ToDos { get; set; } = new ObservableCollection<ToDoViewModel>();
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -31,7 +29,7 @@ namespace Timers.ToDoList
         {
             InitializeComponent();
             _theParent = theParentTimer;
-            AllToDos.ItemsSource = ToDos;
+            AllToDos.ItemsSource = theParentTimer.ToDos;
             DataContext = this;
             OnPropertyChanged(nameof(TimerBrush));
         }
@@ -55,9 +53,9 @@ namespace Timers.ToDoList
 
         private void Border_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            if (ToDos.Count > 0)
+            if (_theParent.ToDos.Count > 0)
             {
-                if (!ToDos[^1].Created)
+                if (!_theParent.ToDos[^1].Created)
                 {
                     return;
                 }
@@ -65,12 +63,12 @@ namespace Timers.ToDoList
             ToDo toDo = new ToDo(_theParent);
             ToDoViewModel todoViewModel = new ToDoViewModel(toDo);
             todoViewModel.RemoveToDo += TodoViewModel_RemoveToDo;
-            ToDos.Add(todoViewModel);
+            _theParent.AddToDo(toDo);
         }
 
         private void TodoViewModel_RemoveToDo(object sender, RemoveToDo e)
         {
-            ToDos.Remove(e.ToDoToRemove);
+            _theParent.ToDos.Remove(e.ToDoToRemove);
         }
 
         private void Window_Deactivated(object sender, EventArgs e)

@@ -9,8 +9,8 @@
     Background="Transparent"
     PreviewMouseDown="Window_PreviewMouseDown"
     ResizeMode="NoResize"
+    Deactivated="Window_Deactivated"
     SizeToContent="WidthAndHeight"
-    Topmost="True"
     WindowStyle="None"
     mc:Ignorable="d">
     <Grid>

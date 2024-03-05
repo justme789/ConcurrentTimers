@@ -7,6 +7,10 @@ namespace Timers.TimerObjects
     public class TimersContainerViewModel
     {
         private DispatcherTimer _ticker;
+        public delegate void ToDoAddedHandler(object sender, ToDoAdded e);
+
+        // Declare the event based on the delegate
+        public event ToDoAddedHandler ToDoAdded;
         public TimersContainer Container
         {
             get;
@@ -32,9 +36,16 @@ namespace Timers.TimerObjects
         {
             TimerViewModel timerViewModel = new TimerViewModel(timer);
             timerViewModel.RemoveTimer += TimerViewModel_RemoveTimer;
+            timerViewModel.ToDoAdded += TimerViewModel_ToDoAdded;
             Timers.Add(timerViewModel);
             Container.Timers.Add(timer);
         }
+
+        private void TimerViewModel_ToDoAdded(object sender, ToDoAdded e)
+        {
+            ToDoAdded?.Invoke(this, new ToDoAdded { AddedToDo = e.AddedToDo });
+        }
+
         private void TimerViewModel_RemoveTimer(object sender, RemoveTimerEvent e)
         {
             RemoveTimer(e.TimerToRemove);

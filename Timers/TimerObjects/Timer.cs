@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Media;
+using Timers.ToDoList;
 
 namespace Timers.TimerObjects
 {
@@ -16,6 +18,7 @@ namespace Timers.TimerObjects
         public bool Finished { get; set; }
         public bool IsPaused { get; set; }
         public long OriginalValue { get; set; }
+        public List<ToDo> ToDos { get; set; } = new List<ToDo>();
         public bool Cancelled
         {
             get => _cancelled;

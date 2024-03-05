@@ -23,6 +23,7 @@ namespace Timers.ToDoList
             }
         }
         private ToDo _toDo;
+        private Brush _textBrush = new SolidColorBrush(Color.FromArgb(44, 255, 255, 255));
         private Visibility _cancelFinishVisibility = Visibility.Visible;
         public Visibility CancelFinishVisibility
         {
@@ -33,7 +34,14 @@ namespace Timers.ToDoList
                 OnPropertyChanged(nameof(CancelFinishVisibility));
             }
         }
-        public string Content { get => _toDo.Content; set => _toDo.Content = value; }
+        public string Content
+        {
+            get => _toDo.Content; set
+            {
+                _toDo.Content = value;
+                OnPropertyChanged(nameof(Content));
+            }
+        }
         public bool Created
         {
             get => _toDo.Created;
@@ -52,6 +60,14 @@ namespace Timers.ToDoList
         // Declare the event based on the delegate
         public event RemoveToDoEventHandler RemoveToDo;
         public Brush ParentBrush { get => _toDo.Parent.Brush; }
+        public Brush TextBrush
+        {
+            get => _textBrush; set
+            {
+                _textBrush = value;
+                OnPropertyChanged(nameof(TextBrush));
+            }
+        }
         public ToDoViewModel(ToDo toDo)
         {
             _toDo = toDo;

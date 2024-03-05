@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -14,7 +15,7 @@ namespace Timers.TimerObjects
         private bool _isHovered = false;
         private DispatcherTimer _colorChanger;
         public Timer Timer { get; }
-        private ToDoListHolder _toDos;
+        public ObservableCollection<ToDoViewModel> ToDos { get; set; } = new ObservableCollection<ToDoViewModel>();
         public int RepeatedValue { get { return Timer.RepeatedValue; } }
         public bool IsRepeated
         {
@@ -203,6 +204,10 @@ namespace Timers.TimerObjects
 
         // Declare the event based on the delegate
         public event RemoveTimerEventHandler RemoveTimer;
+        public delegate void ToDoAddedHandler(object sender, ToDoAdded e);
+
+        // Declare the event based on the delegate
+        public event ToDoAddedHandler ToDoAdded;
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -241,7 +246,6 @@ namespace Timers.TimerObjects
             {
                 InitializeTimer();
             }
-            _toDos = new ToDoListHolder(this);
         }
         public void CreateTimer()
         {
@@ -284,6 +288,13 @@ namespace Timers.TimerObjects
             int b = rnd.Next(160, 255);
             Brush = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
             GlowColor = Brush.Color;
+        }
+        public void AddToDo(ToDo theToDoToAdd)
+        {
+            ToDoViewModel theViewModel = new ToDoViewModel(theToDoToAdd);
+            Timer.ToDos.Add(theToDoToAdd);
+            ToDos.Add(theViewModel);
+            ToDoAdded?.Invoke(this, new ToDoAdded { AddedToDo = theViewModel });
         }
     }
 }

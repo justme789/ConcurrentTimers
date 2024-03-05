@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace Timers.ToDoList
 {
@@ -20,7 +19,10 @@ namespace Timers.ToDoList
             if (!theSender.IsReadOnly)
             {
                 theSender.Text = "";
-                theSender.Foreground = new SolidColorBrush(Colors.White);
+                if (theSender.DataContext is ToDoViewModel toDoItemViewModel)
+                {
+                    toDoItemViewModel.TextBrush = toDoItemViewModel.ParentBrush;
+                }
             }
         }
         private void Cancel_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
