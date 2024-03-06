@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Timers.ToDoList
 {
@@ -27,7 +28,7 @@ namespace Timers.ToDoList
         }
         private void Cancel_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            ToDoViewModel theDataContext = ((Border)sender).DataContext as ToDoViewModel;
+            ToDoViewModel theDataContext = ((ToDoViewModel)((Border)sender).DataContext);
             theDataContext.Remove();
         }
 
@@ -35,6 +36,7 @@ namespace Timers.ToDoList
         {
             ToDoViewModel theDataContext = ((Border)sender).DataContext as ToDoViewModel;
             theDataContext.Created = true;
+            Keyboard.ClearFocus();
 
         }
     }

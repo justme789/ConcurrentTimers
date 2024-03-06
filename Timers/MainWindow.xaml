@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:Timers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:timer="clr-namespace:Timers.TimerObjects"
+    xmlns:todo="clr-namespace:Timers.ToDoList"
     Title="MainWindow"
     Width="800"
     Height="450"
@@ -85,11 +86,11 @@
                 <ColumnDefinition Width="*" MinWidth="150" />
             </Grid.ColumnDefinitions>
             <ScrollViewer
+                Grid.Row="0"
+                Grid.RowSpan="2"
                 Focusable="False"
                 HorizontalScrollBarVisibility="Auto"
-                VerticalScrollBarVisibility="Auto"
-                Grid.Row="0"
-                Grid.RowSpan="2">
+                VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
@@ -205,14 +206,55 @@
                 ResizeBehavior="BasedOnAlignment"
                 ShowsPreview="true" />
             <Border
+                x:Name="AddToDOButton"
                 Grid.Row="2"
                 Grid.Column="2"
                 Margin="3"
                 HorizontalAlignment="Stretch"
-                Background="Transparent"
                 BorderBrush="White"
                 BorderThickness="3"
-                CornerRadius="5" />
+                CornerRadius="5"
+                MouseUp="AddToDOButton_MouseUp">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <LinearGradientBrush>
+                                    <GradientStop Offset="0.0" Color="#66888888" />
+                                    <GradientStop Offset="0.5" Color="#66111122" />
+                                    <GradientStop Offset="1.0" Color="#66221122" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Visibility, RelativeSource={RelativeSource Self}}" Value="Visible">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                AutoReverse="True"
+                                                RepeatBehavior="Forever"
+                                                Storyboard.TargetProperty="Background.(GradientBrush.GradientStops)[1].(GradientStop.Offset)"
+                                                From="0"
+                                                To="1"
+                                                Duration="0:0:6" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="Times"
+                    FontSize="16"
+                    FontWeight="Thin"
+                    Foreground="White">
+                    Add To Do
+                </TextBlock>
+            </Border>
             <ScrollViewer
                 Grid.Row="0"
                 Grid.Column="2"
@@ -227,9 +269,7 @@
                     <ItemsControl x:Name="ToDoList">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Height="30" BorderThickness="2" CornerRadius="4" BorderBrush="{Binding ParentBrush}" Margin="3">
-                                    <TextBlock Text="{Binding Content}" Foreground="{Binding TextBrush}" FontFamily="Consolas" TextWrapping="Wrap" Padding="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                </Border>
+                                <todo:ToDoItem Height="40" Margin="4" />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

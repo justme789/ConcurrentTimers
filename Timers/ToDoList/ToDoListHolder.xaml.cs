@@ -20,7 +20,6 @@ namespace Timers.ToDoList
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         private TimerViewModel _theParent;
-        private SolidColorBrush _timerBrush;
         public SolidColorBrush TimerBrush
         {
             get => _theParent.Brush;
@@ -60,15 +59,8 @@ namespace Timers.ToDoList
                     return;
                 }
             }
-            ToDo toDo = new ToDo(_theParent);
-            ToDoViewModel todoViewModel = new ToDoViewModel(toDo);
-            todoViewModel.RemoveToDo += TodoViewModel_RemoveToDo;
+            ToDo toDo = new ToDo();
             _theParent.AddToDo(toDo);
-        }
-
-        private void TodoViewModel_RemoveToDo(object sender, RemoveToDo e)
-        {
-            _theParent.ToDos.Remove(e.ToDoToRemove);
         }
 
         private void Window_Deactivated(object sender, EventArgs e)

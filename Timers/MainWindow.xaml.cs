@@ -44,8 +44,14 @@ namespace Timers
             TimersContainer timersContainer = new TimersContainer();
             TimersContainerViewModel theViewModel = new TimersContainerViewModel(timersContainer);
             theViewModel.ToDoAdded += TheViewModel_ToDoAdded;
+            theViewModel.ToDoRemoved += TheViewModel_ToDoRemoved;
             timers.Add(theViewModel);
             actual.Add(timersContainer);
+        }
+
+        private void TheViewModel_ToDoRemoved(object sender, RemoveToDo e)
+        {
+            todos.Remove(e.ToDoToRemove);
         }
 
         private void TheViewModel_ToDoAdded(object sender, ToDoAdded e)
@@ -57,6 +63,10 @@ namespace Timers
         {
             if (e.ChangedButton == MouseButton.Left)
             {
+                if (WindowState == WindowState.Maximized)
+                {
+                    WindowState = WindowState.Normal;
+                }
                 this.DragMove();
             }
             e.Handled = false;
@@ -132,6 +142,14 @@ namespace Timers
         private void CloseButton_MouseUp(object sender, MouseButtonEventArgs e)
         {
             this.Close();
+        }
+        private void AddToDOButton_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            ToDo theTodoToAdd = new ToDo();
+            ToDoViewModel theViewModel = new ToDoViewModel(theTodoToAdd, new SolidColorBrush(Colors.White));
+            theViewModel.ToDoRemoved += TheViewModel_ToDoRemoved;
+            if (todos[^1].Created) { todos.Add(theViewModel); }
+
         }
     }
 }

@@ -201,13 +201,14 @@ namespace Timers.TimerObjects
             }
         }
         public delegate void RemoveTimerEventHandler(object sender, RemoveTimerEvent e);
-
-        // Declare the event based on the delegate
         public event RemoveTimerEventHandler RemoveTimer;
-        public delegate void ToDoAddedHandler(object sender, ToDoAdded e);
 
-        // Declare the event based on the delegate
+        public delegate void ToDoAddedHandler(object sender, ToDoAdded e);
         public event ToDoAddedHandler ToDoAdded;
+
+        public delegate void ToDoRemover(object sender, RemoveToDo e);
+        public event ToDoRemover ToDoRemoved;
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -291,10 +292,22 @@ namespace Timers.TimerObjects
         }
         public void AddToDo(ToDo theToDoToAdd)
         {
-            ToDoViewModel theViewModel = new ToDoViewModel(theToDoToAdd);
+            ToDoViewModel theViewModel = new ToDoViewModel(theToDoToAdd, Brush);
+            theViewModel.ToDoRemoved += TheViewModel_ToDoRemoved;
             Timer.ToDos.Add(theToDoToAdd);
             ToDos.Add(theViewModel);
             ToDoAdded?.Invoke(this, new ToDoAdded { AddedToDo = theViewModel });
+        }
+
+        private void TheViewModel_ToDoRemoved(object sender, RemoveToDo e)
+        {
+            RemoveToDo(e.ToDoToRemove);
+        }
+
+        public void RemoveToDo(ToDoViewModel theToDoToRemove)
+        {
+            ToDos.Remove(theToDoToRemove);
+            ToDoRemoved?.Invoke(this, new RemoveToDo { ToDoToRemove = theToDoToRemove });
         }
     }
 }

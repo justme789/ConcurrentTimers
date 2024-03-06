@@ -56,10 +56,8 @@ namespace Timers.ToDoList
             }
         }
         public delegate void RemoveToDoEventHandler(object sender, RemoveToDo e);
-
-        // Declare the event based on the delegate
-        public event RemoveToDoEventHandler RemoveToDo;
-        public Brush ParentBrush { get => _toDo.Parent.Brush; }
+        public event RemoveToDoEventHandler ToDoRemoved;
+        public Brush ParentBrush { get; set; }
         public Brush TextBrush
         {
             get => _textBrush; set
@@ -68,13 +66,14 @@ namespace Timers.ToDoList
                 OnPropertyChanged(nameof(TextBrush));
             }
         }
-        public ToDoViewModel(ToDo toDo)
+        public ToDoViewModel(ToDo toDo, Brush parentBrush)
         {
             _toDo = toDo;
+            ParentBrush = parentBrush;
         }
-        internal void Remove()
+        public void Remove()
         {
-            RemoveToDo?.Invoke(this, new RemoveToDo { ToDoToRemove = this });
+            ToDoRemoved?.Invoke(this, new RemoveToDo { ToDoToRemove = this });
         }
     }
 }

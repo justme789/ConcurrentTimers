@@ -1,16 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Threading;
+using Timers.ToDoList;
 
 namespace Timers.TimerObjects
 {
     public class TimersContainerViewModel
     {
         private DispatcherTimer _ticker;
-        public delegate void ToDoAddedHandler(object sender, ToDoAdded e);
 
-        // Declare the event based on the delegate
+        public delegate void ToDoAddedHandler(object sender, ToDoAdded e);
         public event ToDoAddedHandler ToDoAdded;
+
+        public delegate void ToDoRemover(object sender, RemoveToDo e);
+        public event ToDoRemover ToDoRemoved;
         public TimersContainer Container
         {
             get;
@@ -37,8 +42,15 @@ namespace Timers.TimerObjects
             TimerViewModel timerViewModel = new TimerViewModel(timer);
             timerViewModel.RemoveTimer += TimerViewModel_RemoveTimer;
             timerViewModel.ToDoAdded += TimerViewModel_ToDoAdded;
+            timerViewModel.ToDoRemoved += TimerViewModel_ToDoRemoved;
             Timers.Add(timerViewModel);
             Container.Timers.Add(timer);
+        }
+
+        private void TimerViewModel_ToDoRemoved(object sender, RemoveToDo e)
+        {
+            ToDoRemoved?.Invoke(this, new RemoveToDo { ToDoToRemove = e.ToDoToRemove });
+
         }
 
         private void TimerViewModel_ToDoAdded(object sender, ToDoAdded e)
@@ -55,6 +67,11 @@ namespace Timers.TimerObjects
         {
             Timers.Remove(timer);
             Container.Timers.Remove(timer.Timer);
+            List<ToDoViewModel> theTodos = timer.ToDos.ToList();
+            foreach (ToDoViewModel toDo in theTodos)
+            {
+                timer.RemoveToDo(toDo);
+            }
         }
         private void Ticker_Tick(object? sender, EventArgs e)
         {
@@ -69,6 +86,11 @@ namespace Timers.TimerObjects
                 {
                     if (currentTimer.Cancelled)
                     {
+                        List<ToDoViewModel> theTodos = Timers[0].ToDos.ToList();
+                        foreach (ToDoViewModel toDo in theTodos)
+                        {
+                            Timers[0].RemoveToDo(toDo);
+                        }
                         Timers.RemoveAt(0);
                     }
                     return;
