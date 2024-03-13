@@ -28,23 +28,29 @@ namespace Timers.TimerObjects
         {
             Container = theContainer;
             Timers = new ObservableCollection<TimerViewModel>();
-            foreach (Timer timer in Container.Timers)
-            {
-                Timers.Add(new TimerViewModel(timer));
-            }
             _ticker = new DispatcherTimer();
             _ticker.Interval = TimeSpan.FromSeconds(1);
             _ticker.Tick += Ticker_Tick; ;
             _ticker.Start();
         }
-        public void AddTimer(Timer timer)
+        public void AddTimer(Timer timer, bool loaded = false)
         {
             TimerViewModel timerViewModel = new TimerViewModel(timer);
             timerViewModel.RemoveTimer += TimerViewModel_RemoveTimer;
             timerViewModel.ToDoAdded += TimerViewModel_ToDoAdded;
             timerViewModel.ToDoRemoved += TimerViewModel_ToDoRemoved;
+            if (!loaded)
+            {
+                Container.AddTimer(timer);
+            }
+            else
+            {
+                foreach (ToDo todo in timer.ToDos)
+                {
+                    timerViewModel.AddToDo(todo, true);
+                }
+            }
             Timers.Add(timerViewModel);
-            Container.Timers.Add(timer);
         }
 
         private void TimerViewModel_ToDoRemoved(object sender, RemoveToDo e)
@@ -66,7 +72,7 @@ namespace Timers.TimerObjects
         public void RemoveTimer(TimerViewModel timer)
         {
             Timers.Remove(timer);
-            Container.Timers.Remove(timer.Timer);
+            Container.RemoveTimer(timer.Timer);
             List<ToDoViewModel> theTodos = timer.ToDos.ToList();
             foreach (ToDoViewModel toDo in theTodos)
             {

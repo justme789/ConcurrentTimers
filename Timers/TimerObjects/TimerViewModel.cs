@@ -290,11 +290,14 @@ namespace Timers.TimerObjects
             Brush = new SolidColorBrush(Color.FromRgb((byte)r, (byte)g, (byte)b));
             GlowColor = Brush.Color;
         }
-        public void AddToDo(ToDo theToDoToAdd)
+        public void AddToDo(ToDo theToDoToAdd, bool loaded = false)
         {
             ToDoViewModel theViewModel = new ToDoViewModel(theToDoToAdd, Brush);
             theViewModel.ToDoRemoved += TheViewModel_ToDoRemoved;
-            Timer.ToDos.Add(theToDoToAdd);
+            if (!loaded)
+            {
+                Timer.ToDos.Add(theToDoToAdd);
+            }
             ToDos.Add(theViewModel);
             ToDoAdded?.Invoke(this, new ToDoAdded { AddedToDo = theViewModel });
         }
@@ -307,6 +310,7 @@ namespace Timers.TimerObjects
         public void RemoveToDo(ToDoViewModel theToDoToRemove)
         {
             ToDos.Remove(theToDoToRemove);
+            Timer.ToDos.Remove(theToDoToRemove.ToDo);
             ToDoRemoved?.Invoke(this, new RemoveToDo { ToDoToRemove = theToDoToRemove });
         }
     }

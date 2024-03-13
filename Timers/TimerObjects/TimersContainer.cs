@@ -17,5 +17,9 @@ namespace Timers.TimerObjects
         {
             Timers.Add(timer);
         }
+        public IEnumerable<Timer> GetTimers()
+        {
+            return Timers;
+        }
     }
 }

@@ -10,7 +10,6 @@
     Title="MainWindow"
     Width="800"
     Height="450"
-    KeyDown="Window_KeyDown"
     ResizeMode="NoResize"
     WindowStyle="None"
     mc:Ignorable="d">
@@ -177,7 +176,7 @@
                         BorderBrush="#fff"
                         BorderThickness="4"
                         CornerRadius="10"
-                        MouseUp="Border_MouseUp_1">
+                        MouseUp="TimerContainerAdder_MouseUp">
                         <TextBlock
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
