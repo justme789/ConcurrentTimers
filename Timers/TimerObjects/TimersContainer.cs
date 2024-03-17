@@ -4,6 +4,9 @@ namespace Timers.TimerObjects
 {
     public class TimersContainer
     {
+        /// <summary>
+        /// This class represent a row of timers
+        /// </summary>
         public List<Timer> Timers { get; set; }
         public TimersContainer()
         {

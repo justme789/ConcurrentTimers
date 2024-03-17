@@ -9,16 +9,18 @@ namespace Timers.ToDoList
     /// </summary>
     public partial class ToDoItem : UserControl
     {
+        private bool _gotFocus = false;
         public ToDoItem()
         {
             InitializeComponent();
         }
-
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
+            _gotFocus = true;
             TextBox theSender = sender as TextBox;
             if (!theSender.IsReadOnly)
             {
+                // Hide the hint
                 theSender.Text = "";
                 if (theSender.DataContext is ToDoViewModel toDoItemViewModel)
                 {
@@ -37,7 +39,20 @@ namespace Timers.ToDoList
             ToDoViewModel theDataContext = ((Border)sender).DataContext as ToDoViewModel;
             theDataContext.Created = true;
             Keyboard.ClearFocus();
+        }
 
+        private void TextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            // Make sure there is something in todo
+            ToDoViewModel theDataContext = ((TextBox)sender).DataContext as ToDoViewModel;
+            if (_gotFocus && theDataContext.Content.Length > 0 && !theDataContext.Created)
+            {
+                theDataContext.FinishVisibility = Visibility.Visible;
+            }
+            else
+            {
+                theDataContext.FinishVisibility = Visibility.Collapsed;
+            }
         }
     }
 }

@@ -9,14 +9,36 @@ using Timers.ToDoList;
 
 namespace Timers.TimerObjects
 {
+    /// <summary>
+    /// This is the view model of a timer
+    /// </summary>
     public class TimerViewModel : INotifyPropertyChanged
     {
         private string _displayVal = "";
         private bool _isHovered = false;
         private DispatcherTimer _colorChanger;
+        private TimerCreator _currentStage;
+        /// <summary>
+        /// The original brush value when the timer is created
+        /// This value is used whenever the timer color changes for example
+        /// when it is repeated or paused
+        /// </summary>
+        private readonly Color _originalColor;
+        /// <summary>
+        /// The timer model
+        /// </summary>
         public Timer Timer { get; }
+        /// <summary>
+        /// The stored todos
+        /// </summary>
         public ObservableCollection<ToDoViewModel> ToDos { get; set; } = new ObservableCollection<ToDoViewModel>();
+        /// <summary>
+        /// How many times this timer has been repeated
+        /// </summary>
         public int RepeatedValue { get { return Timer.RepeatedValue; } }
+        /// <summary>
+        /// Wether this timer is repeated
+        /// </summary>
         public bool IsRepeated
         {
             get => Timer.IsRepeated;
@@ -25,14 +47,16 @@ namespace Timers.TimerObjects
                 Timer.IsRepeated = value;
                 if (Timer.IsRepeated)
                 {
+                    // Flip the color scheme of the timer
                     RepeatedVisibility = Visibility.Visible;
                     Background = Brush;
                     Brush = new SolidColorBrush(Colors.Black);
                 }
                 else
                 {
+                    // Bring the color scheme back
                     RepeatedVisibility = Visibility.Collapsed;
-                    Brush = new SolidColorBrush(OriginalColor);
+                    Brush = new SolidColorBrush(_originalColor);
                     Background = new SolidColorBrush(Colors.Transparent);
                 }
                 OnPropertyChanged(nameof(RepeatedVisibility));
@@ -40,12 +64,17 @@ namespace Timers.TimerObjects
                 OnPropertyChanged(nameof(Brush));
             }
         }
-        private TimerCreator _currentStage;
+        /// <summary>
+        /// The time in seconds of the timer
+        /// </summary>
         public long CurrentValue
         {
             get => Timer.CurrentValue;
             set => Timer.CurrentValue = value;
         }
+        /// <summary>
+        /// The current timer creation stage
+        /// </summary>
         public TimerCreator CurrentStage
         {
             get
@@ -58,10 +87,13 @@ namespace Timers.TimerObjects
                 OnPropertyChanged("CurrentStage");
             }
         }
-        public TimerCreator[] Stages
-        {
-            get; set;
-        }
+        /// <summary>
+        /// The stages the timer goes through to get created ie ss. mm. hh
+        /// </summary>
+        public TimerCreator[] Stages { get; set; }
+        /// <summary>
+        /// Wether the timer is cancelled
+        /// </summary>
         public bool Cancelled
         {
             get => Timer.Cancelled; set
@@ -70,6 +102,9 @@ namespace Timers.TimerObjects
                 _colorChanger.Stop();
             }
         }
+        /// <summary>
+        /// Flag that timer passed all the creation stages
+        /// </summary>
         public bool Created
         {
             get
@@ -81,11 +116,15 @@ namespace Timers.TimerObjects
                 Timer.Created = value;
                 if (Timer.Created)
                 {
+                    // Show the actual timer value when done
                     TickerVisibility = Visibility.Visible;
                     OnPropertyChanged("TickerVisibility");
                 }
             }
         }
+        /// <summary>
+        /// Flag that represented if the timer reached 0
+        /// </summary>
         public bool Finished
         {
             get
@@ -99,6 +138,7 @@ namespace Timers.TimerObjects
                 {
                     if (IsRepeated)
                     {
+                        // Just repeat if the timer is repeated
                         Timer.CurrentValue = Timer.OriginalValue;
                         DisplayVal = Timer.CurrentValue.ToString();
                         Timer.Finished = false;
@@ -123,6 +163,9 @@ namespace Timers.TimerObjects
                 OnPropertyChanged("RepeatedValue");
             }
         }
+        /// <summary>
+        /// Show extra info on hover
+        /// </summary>
         public bool Hovered
         {
             get { return _isHovered; }
@@ -140,6 +183,9 @@ namespace Timers.TimerObjects
                 OnPropertyChanged("SubVisibility");
             }
         }
+        /// <summary>
+        /// Handles what happens when a timer is paused
+        /// </summary>
         public bool IsPaused
         {
             get { return Timer.IsPaused; }
@@ -157,8 +203,8 @@ namespace Timers.TimerObjects
                 {
                     PauseVisibility = Visibility.Visible;
                     PlayVisibility = Visibility.Collapsed;
-                    Brush = new SolidColorBrush(OriginalColor);
-                    GlowColor = OriginalColor;
+                    Brush = new SolidColorBrush(_originalColor);
+                    GlowColor = _originalColor;
                 }
                 OnPropertyChanged("PlayVisibility");
                 OnPropertyChanged("PauseVisibility");
@@ -166,6 +212,9 @@ namespace Timers.TimerObjects
                 OnPropertyChanged("GlowColor");
             }
         }
+        /// <summary>
+        /// All the visibility stuff
+        /// </summary>
         public Visibility SubVisibility { get; set; }
         public Visibility CancelVisibility { get; set; } = Visibility.Collapsed;
         public Visibility DisplayVisibility { get; set; } = Visibility.Visible;
@@ -174,10 +223,19 @@ namespace Timers.TimerObjects
         public Visibility TickerVisibility { get; set; } = Visibility.Collapsed;
         public Visibility SetupVisibility { get; set; } = Visibility.Visible;
         public Visibility RepeatedVisibility { get; set; } = Visibility.Collapsed;
+        /// <summary>
+        /// All the colors
+        /// </summary>
         public SolidColorBrush Brush { get; set; }
+        /// <summary>
+        /// Used when the timer is repeated
+        /// </summary>
         public SolidColorBrush Background { get; set; } = new SolidColorBrush(Colors.Transparent);
         public Color GlowColor { get; set; }
-        private Color OriginalColor { get; }
+        /// <summary>
+        /// The actual display that a user sees
+        /// COnversion from seconds to days, hours, minutes, seconds
+        /// </summary>
         public string DisplayVal
         {
             get { return _displayVal; }
@@ -200,12 +258,20 @@ namespace Timers.TimerObjects
                 OnPropertyChanged("DisplayVal");
             }
         }
+        /// <summary>
+        /// The event that this timer has been removed. Gets subscribed to in the container
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public delegate void RemoveTimerEventHandler(object sender, RemoveTimerEvent e);
         public event RemoveTimerEventHandler RemoveTimer;
-
+        /// <summary>
+        /// Todo evemts that propogate all the way up to the main application
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public delegate void ToDoAddedHandler(object sender, ToDoAdded e);
         public event ToDoAddedHandler ToDoAdded;
-
         public delegate void ToDoRemover(object sender, RemoveToDo e);
         public event ToDoRemover ToDoRemoved;
 
@@ -214,15 +280,20 @@ namespace Timers.TimerObjects
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+        /// <summary>
+        /// New timer view model from a timer
+        /// </summary>
+        /// <param name="timer"></param>
         public TimerViewModel(Timer timer)
         {
             Timer = timer;
-
+            // Generate random light color
             BrushCreator();
-            OriginalColor = Brush.Color;
+            _originalColor = Brush.Color;
             _colorChanger = new DispatcherTimer();
             _colorChanger.Interval = TimeSpan.FromMilliseconds(100);
             _colorChanger.Tick += ColorChanger_Tick;
+            // Th creation stages if the timer is new
             if (!timer.Created)
             {
                 TimerCreator timerStage1 = new TimerCreator();
@@ -245,9 +316,13 @@ namespace Timers.TimerObjects
             }
             else
             {
+                // Initialize loaded timer
                 InitializeTimer();
             }
         }
+        /// <summary>
+        /// Initializes the seconds once the timer passes all the creation stages
+        /// </summary>
         public void CreateTimer()
         {
             long seconds = 0;
@@ -275,12 +350,20 @@ namespace Timers.TimerObjects
         {
             RemoveTimer?.Invoke(this, new RemoveTimerEvent { TimerToRemove = this });
         }
+        /// <summary>
+        /// Do pretty colors for attention
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ColorChanger_Tick(object? sender, EventArgs e)
         {
             BrushCreator();
             OnPropertyChanged("Brush");
             OnPropertyChanged("GlowColor");
         }
+        /// <summary>
+        /// Generates a random light color
+        /// </summary>
         public void BrushCreator()
         {
             Random rnd = new Random();
@@ -296,12 +379,12 @@ namespace Timers.TimerObjects
             theViewModel.ToDoRemoved += TheViewModel_ToDoRemoved;
             if (!loaded)
             {
+                // Make sure that the underlying model gets the todo since we save the viewmodel
                 Timer.ToDos.Add(theToDoToAdd);
             }
             ToDos.Add(theViewModel);
             ToDoAdded?.Invoke(this, new ToDoAdded { AddedToDo = theViewModel });
         }
-
         private void TheViewModel_ToDoRemoved(object sender, RemoveToDo e)
         {
             RemoveToDo(e.ToDoToRemove);

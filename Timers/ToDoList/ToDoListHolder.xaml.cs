@@ -34,6 +34,7 @@ namespace Timers.ToDoList
         }
         private void Window_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            // Make sure user is dragging a draggable object
             Type sourceType = e.OriginalSource.GetType();
             PropertyInfo tagProperty = sourceType.GetProperty("Tag");
             if (tagProperty != null)
@@ -49,11 +50,12 @@ namespace Timers.ToDoList
                 }
             }
         }
-
         private void Border_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            // Handles adding a new todo
             if (_theParent.ToDos.Count > 0)
             {
+                // Makes sure that the last todo was already created
                 if (!_theParent.ToDos[^1].Created)
                 {
                     return;
@@ -62,7 +64,6 @@ namespace Timers.ToDoList
             ToDo toDo = new ToDo();
             _theParent.AddToDo(toDo);
         }
-
         private void Window_Deactivated(object sender, EventArgs e)
         {
             this.Close();

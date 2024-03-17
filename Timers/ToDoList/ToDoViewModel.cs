@@ -24,14 +24,24 @@ namespace Timers.ToDoList
         }
         public ToDo ToDo { get; set; }
         private Brush _textBrush = new SolidColorBrush(Color.FromArgb(44, 255, 255, 255));
-        private Visibility _cancelFinishVisibility = Visibility.Visible;
-        public Visibility CancelFinishVisibility
+        private Visibility _cancelVisibility = Visibility.Visible;
+        public Visibility CancelVisibility
         {
-            get => _cancelFinishVisibility;
+            get => _cancelVisibility;
             set
             {
-                _cancelFinishVisibility = value;
-                OnPropertyChanged(nameof(CancelFinishVisibility));
+                _cancelVisibility = value;
+                OnPropertyChanged(nameof(CancelVisibility));
+            }
+        }
+        private Visibility _finishVisibility = Visibility.Collapsed;
+        public Visibility FinishVisibility
+        {
+            get => _finishVisibility;
+            set
+            {
+                _finishVisibility = value;
+                OnPropertyChanged(nameof(FinishVisibility));
             }
         }
         public string Content
@@ -51,7 +61,8 @@ namespace Timers.ToDoList
                 ToDo.Created = value;
                 if (ToDo.Created)
                 {
-                    CancelFinishVisibility = Visibility.Collapsed;
+                    CancelVisibility = Visibility.Collapsed;
+                    FinishVisibility = Visibility.Collapsed;
                     EditableTextBox = true;
                 }
             }
