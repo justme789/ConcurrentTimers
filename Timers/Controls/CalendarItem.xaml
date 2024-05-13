@@ -1,0 +1,37 @@
+﻿<UserControl
+    x:Class="Timers.Controls.CalendarItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Timers.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Border
+        Width="74"
+        Height="74"
+        Margin="{Binding TheMargin}"
+        Background="#2fff"
+        BorderBrush="#aa66aa"
+        BorderThickness="{Binding TheBorderThickness}"
+        CornerRadius="5">
+        <Grid>
+            <Viewbox Margin="4,10,4,0">
+                <TextBlock
+                    Margin="2"
+                    FontWeight="Thin"
+                    Foreground="AliceBlue"
+                    Text="{Binding MonthDay}" />
+            </Viewbox>
+            <Border
+                Width="10"
+                Height="10"
+                Margin="5"
+                VerticalAlignment="Top"
+                Background="Red"
+                CornerRadius="10"
+                Visibility="{Binding IsVisible}" />
+
+        </Grid>
+    </Border>
+</UserControl>

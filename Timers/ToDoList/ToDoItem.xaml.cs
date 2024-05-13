@@ -54,5 +54,23 @@ namespace Timers.ToDoList
                 theDataContext.FinishVisibility = Visibility.Collapsed;
             }
         }
+
+        private void Border_MouseEnter(object sender, MouseEventArgs e)
+        {
+            ToDoViewModel theDataContext = ((Border)sender).DataContext as ToDoViewModel;
+            if (theDataContext.Created)
+            {
+                theDataContext.CancelVisibility = Visibility.Visible;
+            }
+        }
+
+        private void Border_MouseLeave(object sender, MouseEventArgs e)
+        {
+            ToDoViewModel theDataContext = ((Border)sender).DataContext as ToDoViewModel;
+            if (theDataContext != null && theDataContext.Created)
+            {
+                theDataContext.CancelVisibility = Visibility.Collapsed;
+            }
+        }
     }
 }

@@ -35,12 +35,31 @@
 
     <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
         <Grid Width="16">
-            <Border
-                Background="#5fff"
-                CornerRadius="11" />
-            <Track
-                x:Name="PART_Track"
-                IsDirectionReversed="true">
+            <Border Background="#5fff" CornerRadius="11" />
+            <Track x:Name="PART_Track" IsDirectionReversed="true">
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton Command="ScrollBar.PageUpCommand" Style="{StaticResource ScrollBarPageButton}" />
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb Style="{StaticResource ScrollBarThumb}">
+                        <Thumb.BorderBrush>
+                            <SolidColorBrush Color="#4fff" />
+                        </Thumb.BorderBrush>
+                        <Thumb.Background>
+                            <SolidColorBrush Color="#9000" />
+                        </Thumb.Background>
+                    </Thumb>
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Command="ScrollBar.PageDownCommand" Style="{StaticResource ScrollBarPageButton}" />
+                </Track.IncreaseRepeatButton>
+            </Track>
+        </Grid>
+    </ControlTemplate>
+    <ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
+        <Grid Height="16">
+            <Border Background="#5fff" CornerRadius="11" />
+            <Track x:Name="PART_Track" IsDirectionReversed="true">
                 <Track.DecreaseRepeatButton>
                     <RepeatButton Command="ScrollBar.PageUpCommand" Style="{StaticResource ScrollBarPageButton}" />
                 </Track.DecreaseRepeatButton>
@@ -70,7 +89,13 @@
                 <Setter Property="Height" Value="Auto" />
                 <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
             </Trigger>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Height" Value="18" />
+                <Setter Property="Width" Value="Auto" />
+                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+            </Trigger>
         </Style.Triggers>
     </Style>
+
 
 </ResourceDictionary>
