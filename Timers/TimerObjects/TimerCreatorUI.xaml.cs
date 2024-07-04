@@ -43,6 +43,7 @@ namespace Timers.TimerObjects
         private void NextButton_MouseUp(object sender, MouseButtonEventArgs e)
         {
             TimerViewModel currentTimer = (TimerViewModel)DataContext;
+            if (currentTimer.CurrentStage.Value.Length == 0) { return; }
             currentTimer.CurrentStage = currentTimer.Stages[++_currStage];
         }
         /// <summary>
@@ -53,6 +54,7 @@ namespace Timers.TimerObjects
         private void ConfirmButton_MouseUp(object sender, MouseButtonEventArgs e)
         {
             TimerViewModel currentTimer = (TimerViewModel)DataContext;
+            if (currentTimer.CurrentStage.Value.Length == 0) { return; }
             currentTimer.CreateTimer();
         }
         /// <summary>

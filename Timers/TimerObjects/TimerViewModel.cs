@@ -375,6 +375,14 @@ namespace Timers.TimerObjects
         }
         public void AddToDo(ToDo theToDoToAdd, bool loaded = false)
         {
+            if (ToDos.Count > 0)
+            {
+                // Makes sure that the last todo was already created
+                if (!ToDos[^1].Created)
+                {
+                    return;
+                }
+            }
             ToDoViewModel theViewModel = new ToDoViewModel(theToDoToAdd, Brush);
             theViewModel.ToDoRemoved += TheViewModel_ToDoRemoved;
             if (!loaded)
@@ -384,6 +392,20 @@ namespace Timers.TimerObjects
             }
             ToDos.Add(theViewModel);
             ToDoAdded?.Invoke(this, new ToDoAdded { AddedToDo = theViewModel });
+        }
+        public void AddToDo(ToDoViewModel theToDoToAdd)
+        {
+            if (ToDos.Count > 0)
+            {
+                // Makes sure that the last todo was already created
+                if (!ToDos[^1].Created)
+                {
+                    return;
+                }
+            }
+            theToDoToAdd.ToDoRemoved += TheViewModel_ToDoRemoved;
+            ToDos.Add(theToDoToAdd);
+            ToDoAdded?.Invoke(this, new ToDoAdded { AddedToDo = theToDoToAdd });
         }
         private void TheViewModel_ToDoRemoved(object sender, RemoveToDo e)
         {

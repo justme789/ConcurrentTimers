@@ -14,7 +14,7 @@
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <local:CalendarUI Margin="30,50,30,0" x:Name="CalendarUI"/>
+        <local:CalendarUI x:Name="CalendarUI" Margin="30,50,30,30" />
         <GridSplitter
             Grid.Column="1"
             Width="1"
@@ -34,8 +34,11 @@
         <Border
             x:Name="AddToDOButton"
             Grid.Column="2"
-            Margin="5,560,5,25"
+            MinHeight="40"
+            MaxHeight="100"
+            Margin="2,10"
             HorizontalAlignment="Stretch"
+            VerticalAlignment="Bottom"
             BorderBrush="White"
             BorderThickness="0"
             CornerRadius="5"

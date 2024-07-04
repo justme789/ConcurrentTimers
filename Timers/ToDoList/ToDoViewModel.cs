@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
@@ -8,6 +9,7 @@ namespace Timers.ToDoList
     public class ToDoViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
+        private Guid _id = Guid.NewGuid();
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -91,6 +93,18 @@ namespace Timers.ToDoList
         public void Remove()
         {
             ToDoRemoved?.Invoke(this, new RemoveToDo { ToDoToRemove = this });
+        }
+        public override bool Equals(object? obj)
+        {
+            if (obj is ToDoViewModel theOtherObject)
+            {
+                return theOtherObject._id == theOtherObject._id;
+            }
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return _id.GetHashCode();
         }
     }
 }

@@ -7,13 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     AllowsTransparency="true"
     Background="Transparent"
+    Deactivated="Window_Deactivated"
     PreviewMouseDown="Window_PreviewMouseDown"
     ResizeMode="NoResize"
-    Deactivated="Window_Deactivated"
     SizeToContent="WidthAndHeight"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Grid>
+    <Grid Width="600">
         <Border
             Background="#1e1e1e"
             BorderBrush="{Binding TimerBrush}"
@@ -34,35 +34,82 @@
             BorderBrush="{Binding TimerBrush}"
             BorderThickness="2"
             CornerRadius="5" />
-        <StackPanel Margin="15">
-            <ScrollViewer MaxHeight="500" VerticalScrollBarVisibility="Auto">
-                <ItemsControl x:Name="AllToDos">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <local:ToDoItem
-                                Height="40"
-                                Margin="0,0,0,10"
-                                DataContext="{Binding}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
-            <Border
-                Width="400"
-                Height="40"
-                Padding="5"
-                Background="{Binding TimerBrush}"
-                CornerRadius="3"
-                MouseUp="Border_MouseUp">
-                <Path
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Data="M12,1C5.9,1,1,5.9,1,12s4.9,11,11,11s11-4.9,11-11S18.1,1,12,1z M17,14h-3v3c0,1.1-0.9,2-2,2s-2-0.9-2-2v-3H7 c-1.1,0-2-0.9-2-2c0-1.1,0.9-2,2-2h3V7c0-1.1,0.9-2,2-2s2,0.9,2,2v3h3c1.1,0,2,0.9,2,2C19,13.1,18.1,14,17,14z"
-                    Fill="{Binding TimerBrush}"
-                    Stretch="Uniform"
-                    Stroke="#000" />
-            </Border>
-        </StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border />
+            <StackPanel Margin="15">
+                <Border
+                    MinHeight="50"
+                    Margin="0,0,0,10"
+                    Padding="3"
+                    BorderBrush="#3fff"
+                    BorderThickness="2"
+                    CornerRadius="3">
+                    <ScrollViewer MaxHeight="500" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl
+                            x:Name="AllToDos"
+                            AllowDrop="True"
+                            Background="Transparent"
+                            Drop="AllToDos_Drop"
+                            PreviewMouseDown="AllToDos_PreviewMouseDown">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:ToDoItem
+                                        Height="40"
+                                        Margin="3"
+                                        DataContext="{Binding}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                </Border>
+                <Border
+                    Height="40"
+                    Padding="5"
+                    Background="{Binding TimerBrush}"
+                    CornerRadius="3"
+                    MouseUp="Border_MouseUp">
+                    <Path
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Data="M12,1C5.9,1,1,5.9,1,12s4.9,11,11,11s11-4.9,11-11S18.1,1,12,1z M17,14h-3v3c0,1.1-0.9,2-2,2s-2-0.9-2-2v-3H7 c-1.1,0-2-0.9-2-2c0-1.1,0.9-2,2-2h3V7c0-1.1,0.9-2,2-2s2,0.9,2,2v3h3c1.1,0,2,0.9,2,2C19,13.1,18.1,14,17,14z"
+                        Fill="{Binding TimerBrush}"
+                        Stretch="Uniform"
+                        Stroke="#000" />
+                </Border>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Margin="15">
+                <Border
+                    MinHeight="50"
+                    Margin="0,0,0,10"
+                    Padding="3"
+                    BorderBrush="#3fff"
+                    BorderThickness="2"
+                    CornerRadius="3">
+                    <ScrollViewer MaxHeight="500" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl
+                            x:Name="AvailableToDos"
+                            AllowDrop="True"
+                            Drop="AvailableToDos_Drop"
+                            PreviewMouseDown="AllToDos_PreviewMouseDown">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:ToDoItem
+                                        Height="40"
+                                        Margin="3"
+                                        DataContext="{Binding}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                </Border>
+            </StackPanel>
+        </Grid>
 
     </Grid>
 </Window>

@@ -134,6 +134,7 @@ namespace Timers.TimerObjects
                         foreach (ToDoViewModel toDo in theTodos)
                         {
                             Timers[0].RemoveToDo(toDo);
+                            toDo.Remove();
                         }
                         Timers.RemoveAt(0);
                     }

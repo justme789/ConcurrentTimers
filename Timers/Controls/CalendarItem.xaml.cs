@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using Timers.Messengers;
 using Timers.ToDoList;
 
 namespace Timers.Controls
@@ -14,7 +15,7 @@ namespace Timers.Controls
     /// </summary>
     public class CalendarItemModel : INotifyPropertyChanged
     {
-        public ObservableCollection<ToDoViewModel> ToDos { get; set; } = new ObservableCollection<ToDoViewModel>();
+        public ObservableCollection<ToDoViewModel> ToDos { get; set; }
         public DateTime TheDate { get; set; }
         public Visibility IsVisible { get; set; } = Visibility.Collapsed;
         public Thickness TheMargin { get; set; } = new Thickness(0, 5, 10, 5);
@@ -46,6 +47,7 @@ namespace Timers.Controls
         {
             TheDate = theDateTime;
             MonthDay = TheDate.ToString("dd");
+            ToDos = ToDoMessenger.Instance.GetListForDay(theDateTime);
             OnPropertyChanged(nameof(MonthDay));
         }
         public void Refresh()

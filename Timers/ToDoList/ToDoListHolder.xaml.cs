@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Timers.Messengers;
 using Timers.TimerObjects;
 
 namespace Timers.ToDoList
@@ -29,6 +30,7 @@ namespace Timers.ToDoList
             InitializeComponent();
             _theParent = theParentTimer;
             AllToDos.ItemsSource = theParentTimer.ToDos;
+            AvailableToDos.ItemsSource = ToDoMessenger.Instance.TodaysTodos;
             DataContext = this;
             OnPropertyChanged(nameof(TimerBrush));
         }
@@ -53,20 +55,44 @@ namespace Timers.ToDoList
         private void Border_MouseUp(object sender, MouseButtonEventArgs e)
         {
             // Handles adding a new todo
-            if (_theParent.ToDos.Count > 0)
-            {
-                // Makes sure that the last todo was already created
-                if (!_theParent.ToDos[^1].Created)
-                {
-                    return;
-                }
-            }
             ToDo toDo = new ToDo();
             _theParent.AddToDo(toDo);
         }
         private void Window_Deactivated(object sender, EventArgs e)
         {
             this.Close();
+        }
+        private static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            while (current != null)
+            {
+                if (current is T)
+                {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            return null;
+        }
+
+        private void AllToDos_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ToDoItem todoitem = FindAncestor<ToDoItem>((DependencyObject)e.OriginalSource);
+
+            if (todoitem != null && ((ToDoViewModel)todoitem.DataContext).Created)
+            {
+                DragDrop.DoDragDrop(todoitem, ((ToDoViewModel)todoitem.DataContext), DragDropEffects.Move);
+            }
+        }
+
+        private void AvailableToDos_Drop(object sender, DragEventArgs e)
+        {
+
+        }
+
+        private void AllToDos_Drop(object sender, DragEventArgs e)
+        {
+            _theParent.AddToDo((ToDoViewModel)e.Data.GetData(typeof(ToDoViewModel)));
         }
     }
 }

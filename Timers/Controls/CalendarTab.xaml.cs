@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Timers.Messengers;
 using Timers.ToDoList;
 
 namespace Timers.Controls
@@ -36,12 +37,12 @@ namespace Timers.Controls
                 {
                     if (todos[^1].Created)
                     {
-                        todos.Add(theViewModel);
+                        ToDoMessenger.Instance.AddItem(CalendarUI.SelectedDate.TheDate, theViewModel);
                     }
                 }
                 else
                 {
-                    todos.Add(theViewModel);
+                    ToDoMessenger.Instance.AddItem(CalendarUI.SelectedDate.TheDate, theViewModel);
                 }
                 ToDoContainer.ItemsSource = todos;
                 CalendarUI.SelectedDate.Refresh();

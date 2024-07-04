@@ -8,15 +8,14 @@
     mc:Ignorable="d">
 
     <Border
-        Width="74"
-        Height="74"
+        Height="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
         Margin="{Binding TheMargin}"
         Background="#2fff"
         BorderBrush="#aa66aa"
         BorderThickness="{Binding TheBorderThickness}"
         CornerRadius="5">
         <Grid>
-            <Viewbox Margin="4,10,4,0">
+            <Viewbox >
                 <TextBlock
                     Margin="2"
                     FontWeight="Thin"
