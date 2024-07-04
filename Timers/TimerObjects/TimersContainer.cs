@@ -4,6 +4,9 @@ namespace Timers.TimerObjects
 {
     public class TimersContainer
     {
+        /// <summary>
+        /// This class represent a row of timers
+        /// </summary>
         public List<Timer> Timers { get; set; }
         public TimersContainer()
         {
@@ -16,6 +19,10 @@ namespace Timers.TimerObjects
         public void RemoveTimer(Timer timer)
         {
             Timers.Add(timer);
+        }
+        public IEnumerable<Timer> GetTimers()
+        {
+            return Timers;
         }
     }
 }

@@ -4,186 +4,116 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Timers"
-    xmlns:timer="clr-namespace:Timers.TimerObjects"
-    
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:timer="clr-namespace:Timers.Controls"
+    xmlns:todo="clr-namespace:Timers.ToDoList"
     Title="MainWindow"
-    Width="800"
-    Height="450"
-    KeyDown="Window_KeyDown"
+    Width="1000"
+    Height="650"
+    Background="#202020"
     ResizeMode="NoResize"
     WindowStyle="None"
     mc:Ignorable="d">
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+            CaptionHeight="0"
+            CornerRadius="20"
+            GlassFrameThickness="0" />
+    </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <Style x:Key="_ListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border
+                            Name="_Border"
+                            Padding="2"
+                            SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="_Border" Property="Background" Value="#6fff" />
+                                <Setter TargetName="_Border" Property="CornerRadius" Value="6" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="27" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-        <Grid Background="#1f1f1f">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="43" />
-                <ColumnDefinition Width="43" />
-                <ColumnDefinition Width="43" />
-            </Grid.ColumnDefinitions>
+        <timer:TitleBar x:Name="TheTitleBar" Grid.ColumnSpan="2" />
+        <ScrollViewer
+            x:Name="TimersListContainer"
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            Margin="0,20,0,0"
+            Focusable="False"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Auto">
+            <timer:TimersList x:Name="TimersList" />
+        </ScrollViewer>
+        <timer:CalendarTab
+            x:Name="CalendarContainer"
+            Grid.Row="1"
+            Visibility="Collapsed" />
+        <Grid Grid.RowSpan="2" Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
             <Border
-                Grid.Column="0"
-                Background="Transparent"
-                PreviewMouseDown="Window_MouseDown" />
-            <Border
-                Name="Minimize"
-                Grid.Column="1"
-                Padding="12"
-                Background="Transparent"
-                MouseEnter="Border_MouseEnter"
-                MouseLeave="Border_MouseLeave"
-                MouseUp="Minimize_MouseUp">
-                <Path
-                    Data="M208,134.4H48c-3.534,0-6.4-2.866-6.4-6.4s2.866-6.4,6.4-6.4h160c3.534,0,6.4,2.866,6.4,6.4S211.534,134.4,208,134.4z"
-                    Fill="White"
-                    Opacity="0.3"
-                    Stretch="Uniform" />
-            </Border>
-            <Border
-                Name="Maximize"
-                Grid.Column="2"
-                Padding="7"
-                Background="Transparent"
-                MouseEnter="Border_MouseEnter"
-                MouseLeave="Border_MouseLeave"
-                MouseUp="Maximize_MouseUp">
-                <Path
-                    Data="M5.75 3H18.25C19.7688 3 21 4.23122 21 5.75V18.25C21 19.7688 19.7688 21 18.25 21H5.75C4.23122 21 3 19.7688 3 18.25V5.75C3 4.23122 4.23122 3 5.75 3ZM5.75 4.5C5.05964 4.5 4.5 5.05964 4.5 5.75V18.25C4.5 18.9404 5.05964 19.5 5.75 19.5H18.25C18.9404 19.5 19.5 18.9404 19.5 18.25V5.75C19.5 5.05964 18.9404 4.5 18.25 4.5H5.75Z"
-                    Fill="White"
-                    Opacity="0.3"
-                    Stretch="Uniform" />
-            </Border>
-            <Border
-                Name="CloseButton"
-                Grid.Column="3"
-                Padding="7"
-                Background="Transparent"
-                MouseEnter="CloseButton_MouseEnter"
-                MouseLeave="Border_MouseLeave"
-                MouseUp="CloseButton_MouseUp">
-                <Path
-                    Data="M38 12.83l-2.83-2.83-11.17 11.17-11.17-11.17-2.83 2.83 11.17 11.17-11.17 11.17 2.83 2.83 11.17-11.17 11.17 11.17 2.83-2.83-11.17-11.17z"
-                    Fill="White"
-                    Opacity="0.3"
-                    Stretch="Uniform" />
+                Width="300"
+                Margin="10"
+                Background="#3fff"
+                CornerRadius="7">
+                <ListBox
+                    Background="Transparent"
+                    BorderThickness="0"
+                    ItemContainerStyle="{DynamicResource _ListBoxItemStyle}"
+                    SelectedIndex="0"
+                    SelectionChanged="ListBox_SelectionChanged">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBoxItem Background="Transparent">
+                        <ListBoxItem.Content>
+                            <Border
+                                Width="145"
+                                Background="Transparent"
+                                CornerRadius="5">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="Transparent"
+                                    Text="Timers" />
+                            </Border>
+                        </ListBoxItem.Content>
+                    </ListBoxItem>
+                    <ListBoxItem Background="Transparent">
+                        <ListBoxItem.Content>
+                            <Border
+                                Width="145"
+                                Background="Transparent"
+                                CornerRadius="5">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="Transparent"
+                                    Text="Calendar" />
+                            </Border>
+                        </ListBoxItem.Content>
+                    </ListBoxItem>
+                </ListBox>
             </Border>
         </Grid>
-        <Border Grid.Row="1" Background="#202020">
-            <ScrollViewer
-                Focusable="False"
-                HorizontalScrollBarVisibility="Auto"
-                VerticalScrollBarVisibility="Auto">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
-                    <ItemsControl x:Name="TimersList">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto" />
-                                        <ColumnDefinition Width="auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <ItemsControl Background="Transparent" ItemsSource="{Binding Timers}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Horizontal" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border
-                                                    Width="120"
-                                                    Height="120"
-                                                    Margin="10,10,0,0"
-                                                    Background="{Binding Background}"
-                                                    BorderBrush="{Binding Brush}"
-                                                    BorderThickness="2"
-                                                    CornerRadius="10">
-
-                                                    <Grid>
-                                                        <timer:TimerModule Visibility="{Binding TickerVisibility}" />
-                                                        <timer:TimerCreatorUI Visibility="{Binding SetupVisibility}" />
-                                                    </Grid>
-                                                    <Border.Effect>
-                                                        <DropShadowEffect
-                                                            BlurRadius="10"
-                                                            Opacity="1"
-                                                            ShadowDepth="0"
-                                                            Color="AliceBlue" />
-                                                    </Border.Effect>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                    <Border
-                                        Grid.Column="1"
-                                        Width="120"
-                                        Height="120"
-                                        Margin="10,10,0,0"
-                                        Background="#dd101010"
-                                        BorderBrush="#fff"
-                                        BorderThickness="4"
-                                        CornerRadius="10"
-                                        DataContext="{Binding}"
-                                        MouseUp="Border_MouseUp">
-                                        <TextBlock
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            FontSize="42"
-                                            FontWeight="Bold"
-                                            Foreground="#fff"
-                                            Text="+">
-                                            <TextBlock.Effect>
-                                                <DropShadowEffect
-                                                    BlurRadius="6"
-                                                    Opacity="1"
-                                                    ShadowDepth="0"
-                                                    Color="{Binding GlowColor}" />
-                                            </TextBlock.Effect>
-                                        </TextBlock>
-                                    </Border>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <Border
-                        Grid.Row="1"
-                        Width="120"
-                        Height="120"
-                        Margin="10,10,0,0"
-                        HorizontalAlignment="Left"
-                        Background="#dd101010"
-                        BorderBrush="#fff"
-                        BorderThickness="4"
-                        CornerRadius="10"
-                        MouseUp="Border_MouseUp_1">
-                        <TextBlock
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="42"
-                            FontWeight="Bold"
-                            Foreground="#fff"
-                            Text="+">
-                            <TextBlock.Effect>
-                                <DropShadowEffect
-                                    BlurRadius="6"
-                                    Opacity="1"
-                                    ShadowDepth="0"
-                                    Color="{Binding GlowColor}" />
-                            </TextBlock.Effect>
-                        </TextBlock>
-                    </Border>
-                </Grid>
-            </ScrollViewer>
-        </Border>
     </Grid>
 </Window>

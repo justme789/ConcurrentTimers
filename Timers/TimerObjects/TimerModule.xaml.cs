@@ -4,10 +4,11 @@ using Timers.ToDoList;
 
 namespace Timers.TimerObjects
 {
+    /// <summary>
+    /// The UI of what a timer looks like
+    /// </summary>
     public partial class TimerModule : UserControl
     {
-
-
         public TimerModule()
         {
             InitializeComponent();
@@ -28,12 +29,14 @@ namespace Timers.TimerObjects
 
         private void PlayPauseButton_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            ((TimerViewModel)((Border)sender).DataContext).IsPaused = !((TimerViewModel)((Border)sender).DataContext).IsPaused;
+            TimerViewModel dataContextTimer = ((TimerViewModel)((Border)sender).DataContext);
+            dataContextTimer.IsPaused = !dataContextTimer.IsPaused;
         }
 
         private void RepeatButton_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            ((TimerViewModel)((Border)sender).DataContext).IsRepeated = !((TimerViewModel)((Border)sender).DataContext).IsRepeated;
+            TimerViewModel dataContextTimer = ((TimerViewModel)((Border)sender).DataContext);
+            dataContextTimer.IsRepeated = !dataContextTimer.IsRepeated;
         }
 
         private void CLoseButton_MouseUp(object sender, MouseButtonEventArgs e)
